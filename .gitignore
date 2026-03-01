@@ -1,0 +1,80 @@
+# -----------------------------------------------
+# SECRETS
+# -----------------------------------------------
+.env
+*.env
+.env.*
+!.env.example
+
+# -----------------------------------------------
+# PYTHON
+# -----------------------------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+venv/
+.venv/
+env/
+ENV/
+
+# -----------------------------------------------
+# DATA FILES (too large for git)
+# -----------------------------------------------
+data/raw/
+data/processed/
+faiss/
+
+# Keep the training folder structure but not the data
+data/training/raw_generated.jsonl
+
+# Keep the final clean dataset (small enough, useful to version)
+# i.e. data/training/training_data.jsonl is NOT ignored
+
+# -----------------------------------------------
+# ML MODEL CACHE
+# -----------------------------------------------
+# SentenceTransformers downloads models here
+.cache/
+~/.cache/huggingface/
+
+# -----------------------------------------------
+# OS FILES
+# -----------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# -----------------------------------------------
+# EDITORS
+# -----------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# -----------------------------------------------
+# JUPYTER
+# -----------------------------------------------
+.ipynb_checkpoints/
+*.ipynb
+
+# -----------------------------------------------
+# LOGS
+# -----------------------------------------------
+*.log
+logs/

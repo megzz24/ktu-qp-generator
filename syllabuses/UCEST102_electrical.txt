@@ -1,0 +1,53 @@
+COURSE CODE: UCEST102
+SUBJECT: Electrical and Electronics
+============================================================
+
+MODULE 1: DC Circuits and Magnetic Circuits
+--------------------------------------------------
+  - Current and voltage division rule, relative potential
+  - Capacitors and inductors: V-I relations, energy stored
+  - Ohm's law, Kirchhoff's laws - numerical problems
+  - Star-delta conversion (resistive networks) - numerical problems
+  - Mesh current method: matrix representation, solution of network equations
+  - Node voltage method: matrix representation, solution of network equations by matrix methods, numerical problems
+  - Magnetic circuits: MMF, field strength, flux density, reluctance
+  - Comparison of electric and magnetic circuits
+  - Series and parallel magnetic circuits with composite materials (numerical problems not needed)
+
+MODULE 2: AC Circuits and Three Phase Systems
+--------------------------------------------------
+  - Electromagnetic induction: Faraday's laws, Lenz's law
+  - Statically and dynamically induced EMF
+  - Self-inductance, mutual inductance, coefficient of coupling
+  - AC generation, sinusoidal waveforms: frequency, period, average value, RMS, form factor
+  - Phasor representation: trigonometric, rectangular, polar, complex forms
+  - Purely resistive, inductive and capacitive circuits
+  - Inductive and capacitive reactance, impedance
+  - RL, RC, RLC series circuits: power factor, active, reactive, apparent power
+  - Three phase systems: generation, advantages, star and delta connections
+  - Line and phase voltages and currents (balanced only)
+
+MODULE 3: Electronic Devices and Transistors
+--------------------------------------------------
+  - Passive and active components
+  - PN junction diode: working, V-I characteristics
+  - Zener diode, avalanche breakdown, Zener voltage regulator
+  - DC power supply block diagram
+  - Half wave, full wave, bridge rectifiers, ripple factor, capacitor filter
+  - BJT: construction, working, V-I characteristics, CE configuration
+  - CE, CB, CC configuration comparison
+  - Biasing concept, load line
+  - Transistor as switch and amplifier
+  - RC coupled amplifier: circuit diagram, frequency response
+  - FET, N-channel and P-channel MOSFETs: construction and working
+
+MODULE 4: Modern Electronics and Communication
+--------------------------------------------------
+  - Communication system block diagram
+  - Fiber optic communication system block diagram
+  - AM and FM concepts, AM and FM superheterodyne receiver block diagram
+  - Wired and wireless communication basics
+  - Comparison of 3G, 4G, 5G, 6G technologies
+  - Electronic instrumentation system, digital multimeter, function generator
+  - CRO and Lissajous patterns
+  - IoT applications: smart homes, healthcare, agriculture

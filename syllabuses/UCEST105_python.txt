@@ -1,0 +1,40 @@
+COURSE CODE: UCEST105
+SUBJECT: Python
+============================================================
+
+MODULE 1: Problem Solving and Python Essentials
+--------------------------------------------------
+  - Problem-solving strategies: definition, Trial and Error, Heuristics, Means-Ends Analysis, Backtracking
+  - Problem-solving process: understanding, modelling, algorithm, writing, testing, evaluating
+  - Computer as a model of computation
+  - Variables, numeric and string data types
+  - Math module, Python Standard Library
+  - Basic I/O: print, input
+  - Python operators and precedence
+
+MODULE 2: Algorithms and Flowcharts
+--------------------------------------------------
+  - Pseudocode: definition, reasons for use
+  - Pseudocode constructs: sequencing, selection (if-else, case), repetition (for, while, repeat-until)
+  - Pseudocode sample problems
+  - Flowchart symbols: start/end, arithmetic, input/output, decision, module call
+  - Flowchart elements: for loop (hexagon), flow-lines, on-page and off-page connectors
+
+MODULE 3: Python Programming and Functions
+--------------------------------------------------
+  - Selection and iteration: if-else, elif, for, while, range
+  - Sequence data types: list, tuple, set, string, dictionary
+  - Arrays using NumPy
+  - Problem decomposition strategy and modularization
+  - Motivation for modularization
+  - Defining functions, multiple return values
+  - Recursion: definition, call stack, circularity
+  - Recursive problems: Fibonacci, GCD, factorial, integer addition, sum of digits
+
+MODULE 4: Computational Approaches
+--------------------------------------------------
+  - Brute-force: exhaustive search, e.g. padlock/password guessing
+  - Divide and conquer: Merge Sort, advantages and disadvantages
+  - Dynamic programming: Fibonacci, recursion vs DP
+  - Greedy algorithm: task scheduling example, motivations, characteristics, greedy vs DP
+  - Randomized approach: coupon collector problem, hat-check problem, motivations

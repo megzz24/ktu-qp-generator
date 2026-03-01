@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KTU Question Paper Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            color: #1a3a5c;
+        }
+
+        header p {
+            color: #666;
+            margin-top: 6px;
+            font-size: 0.95rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            padding: 28px 32px;
+            width: 100%;
+            max-width: 860px;
+            margin-bottom: 24px;
+        }
+
+        .card h2 {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        label {
+            font-size: 0.85rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        select {
+            padding: 10px 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            color: #333;
+            background: #fafafa;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #1a3a5c;
+        }
+
+        button {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        #generateBtn {
+            background: #1a3a5c;
+            color: white;
+        }
+
+        #generateBtn:hover {
+            background: #14304d;
+        }
+
+        #generateBtn:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        #downloadBtn {
+            background: #c0922a;
+            color: white;
+        }
+
+        #downloadBtn:hover {
+            background: #a87a22;
+        }
+
+        .loader {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 12px;
+        }
+
+        .loader.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #ddd;
+            border-top-color: #1a3a5c;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #error {
+            display: none;
+            background: #fff0f0;
+            border: 1px solid #f5c6c6;
+            color: #c0392b;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-top: 12px;
+        }
+
+        #outputSection {
+            display: none;
+        }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 560px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.88rem;
+            line-height: 1.6;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            resize: vertical;
+            color: #222;
+            background: #fafafa;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #1a3a5c;
+        }
+
+        .hint {
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>KTU Question Paper Generator</h1>
+        <p>Model Engineering College &nbsp;|&nbsp; Department of Computer Science and Engineering</p>
+    </header>
+
+    <!-- Input Card -->
+    <div class="card">
+        <h2>Generate Question Paper</h2>
+        <div class="form-row">
+
+            <div class="form-group">
+                <label for="semester">Semester</label>
+                <select id="semester">
+                    <option value="1 &amp; 2">Semester 1 &amp; 2</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="subject">Subject</label>
+                <select id="subject" onchange="onSubjectChange()">
+                    <option value="Mathematics 1">Mathematics for Information Science – 1</option>
+                    <option value="Python">Algorithmic Thinking with Python</option>
+                    <option value="Electrical and Electronics">Intro to Electrical &amp; Electronics Engg</option>
+                    <option value="Engineering Graphics">Engineering Graphics and CAD</option>
+                    <option value="Chemistry">Chemistry for Information Science</option>
+                    <option value="Physics">Physics for Information Science</option>
+                    <option value="Mathematics 2">Mathematics for Information Science – 2</option>
+                    <option value="Programming in C">Programming in C</option>
+                    <option value="Foundations of Computing">Foundations of Computing</option>
+                    <option value="Engineering Entrepreneurship and IPR">Engineering Entrepreneurship and IPR</option>
+                    <option value="Discrete Mathematics">Discrete Mathematics</option>
+                    <option value="LSPC">Life Skills and Professional Communication</option>
+                    <option value="Health and Wellness">Health and Wellness</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="qpCode">QP Code</label>
+                <input type="text" id="qpCode" placeholder="e.g. 03UCEST105122402"
+                    style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:0.95rem;background:#fafafa;" />
+            </div>
+
+            <div class="form-group">
+                <label for="examTitle">Exam Title</label>
+                <input type="text" id="examTitle" placeholder="e.g. Regular Examination December 2024"
+                    style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:0.95rem;background:#fafafa;" />
+            </div>
+
+            <button id="generateBtn" onclick="generate()">Generate</button>
+        </div>
+
+        <div class="loader" id="loader">
+            <div class="spinner"></div>
+            Generating question paper, please wait... (takes 6-8 minutes due to API rate limits)
+        </div>
+
+        <div id="error"></div>
+    </div>
+
+    <!-- Output Card -->
+    <div class="card" id="outputSection">
+        <div class="output-header">
+            <h2>Question Paper</h2>
+            <button id="downloadBtn" onclick="downloadPDF()">Download PDF</button>
+        </div>
+        <textarea id="output" spellcheck="false"></textarea>
+        <p class="hint">You can edit the question paper above before downloading.</p>
+    </div>
+
+    <script>
+        const API_URL = "http://localhost:5000";
+
+        const SUBJECT_MAP = {
+            "Mathematics 1": { code: "GAMAT101", label: "MATHEMATICS FOR INFORMATION SCIENCE – 1" },
+            "Python": { code: "UCEST105", label: "ALGORITHMIC THINKING WITH PYTHON" },
+            "Electrical and Electronics": { code: "GXEST104", label: "INTRODUCTION TO ELECTRICAL AND ELECTRONICS ENGINEERING" },
+            "Chemistry": { code: "GXCY122", label: "CHEMISTRY FOR INFORMATION SCIENCE AND ELECTRICAL SCIENCE" },
+            "Physics": { code: "GAPHT121", label: "PHYSICS FOR INFORMATION SCIENCE" },
+            "Mathematics 2": { code: "GAMAT201", label: "MATHEMATICS FOR INFORMATION SCIENCE – 2" },
+            "Programming in C": { code: "GXEST204", label: "PROGRAMMING IN C" },
+            "Foundations of Computing": { code: "GXEST203", label: "FOUNDATIONS OF COMPUTING: FROM HARDWARE ESSENTIALS TO WEB DESIGN" },
+            "Engineering Entrepreneurship and IPR": { code: "UCEST206", label: "ENGINEERING ENTREPRENEURSHIP AND IPR" },
+            "Discrete Mathematics": { code: "PCCST205", label: "DISCRETE MATHEMATICS" },
+        };
+
+        function onSubjectChange() {
+            const val = document.getElementById("subject").value;
+            const info = SUBJECT_MAP[val];
+            // course code is auto-used in PDF from SUBJECT_MAP, no display field needed
+        }
+
+        window.addEventListener("DOMContentLoaded", () => { onSubjectChange(); });
+
+        async function generate() {
+            const semester = document.getElementById("semester").value;
+            const subject = document.getElementById("subject").value;
+            const btn = document.getElementById("generateBtn");
+            const loader = document.getElementById("loader");
+            const errorDiv = document.getElementById("error");
+            const outputSec = document.getElementById("outputSection");
+
+            errorDiv.style.display = "none";
+            outputSec.style.display = "none";
+            loader.classList.add("active");
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(`${API_URL}/generate`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ semester, subject })
+                });
+
+                const data = await res.json();
+                if (!res.ok || data.error) throw new Error(data.error || "Unknown error from server.");
+
+                document.getElementById("output").value = data.question_paper;
+                outputSec.style.display = "block";
+
+            } catch (err) {
+                errorDiv.textContent = `Error: ${err.message}`;
+                errorDiv.style.display = "block";
+            } finally {
+                loader.classList.remove("active");
+                btn.disabled = false;
+            }
+        }
+
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ unit: "mm", format: "a4" });
+            const text = document.getElementById("output").value;
+            const subjectVal = document.getElementById("subject").value;
+            const qpCode = document.getElementById("qpCode").value.trim();
+            const examTitle = document.getElementById("examTitle").value.trim()
+                || "First Semester B.Tech Degree Examination";
+
+            const info = SUBJECT_MAP[subjectVal];
+            const subjectLabel = info ? info.label : subjectVal.toUpperCase();
+            const courseCode = info ? info.code : "";
+
+            const margin = 15;
+            const pageW = doc.internal.pageSize.getWidth();
+            const pageH = doc.internal.pageSize.getHeight();
+            const maxWidth = pageW - margin * 2;
+
+            let y = 12;
+
+            // QP Code bold centered at very top (like real KTU paper)
+            if (qpCode) {
+                doc.setFontSize(11);
+                doc.setFont("helvetica", "bold");
+                doc.text(qpCode, pageW / 2, y, { align: "center" });
+                y += 7;
+            }
+
+            // Reg No and Name
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "normal");
+            doc.text("Reg No.: ___________________", margin, y);
+            doc.text("Name: ___________________", pageW - margin, y, { align: "right" });
+            y += 7;
+
+            // University name
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "bold");
+            doc.text("APJ ABDUL KALAM TECHNOLOGICAL UNIVERSITY", pageW / 2, y, { align: "center" });
+            y += 6;
+
+            // Exam title
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "normal");
+            doc.text(examTitle, pageW / 2, y, { align: "center" });
+            y += 12; // extra space before course code
+
+            // Course Code and Course Name
+            doc.setFont("helvetica", "bold");
+            doc.text(`Course Code: ${courseCode}`, pageW / 2, y, { align: "center" });
+            y += 5;
+
+            const nameLines = doc.splitTextToSize(`Course Name: ${subjectLabel}`, maxWidth);
+            nameLines.forEach(line => { doc.text(line, pageW / 2, y, { align: "center" }); y += 5; });
+            y += 4;
+
+            // Max marks and duration
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(10);
+            doc.text("Max. Marks: 60", margin, y);
+            doc.text("Duration: 2 Hours 30 Minutes", pageW - margin, y, { align: "right" });
+            y += 8;
+
+            // Body — center PART A / PART B / Module headings, normal for rest
+            doc.setFontSize(10);
+
+            // Pre-process: join continuation lines into single lines
+            const rawLines = text.split("\n");
+            const joinedLines = [];
+            for (let i = 0; i < rawLines.length; i++) {
+                const line = rawLines[i];
+                const trimmed = line.trim();
+                // A new logical line starts with: question number, a) b), Module, PART, OR, or is empty
+                const isNewLine = !trimmed ||
+                    /^\d+\./.test(trimmed) ||
+                    /^[a-b]\)/.test(trimmed) ||
+                    /^(PART [AB]|SECTION [AB]|Module\s*[-–]?\s*\d+|OR)$/i.test(trimmed) ||
+                    /^\(Answer/i.test(trimmed);
+                if (isNewLine || joinedLines.length === 0) {
+                    joinedLines.push(line);
+                } else {
+                    // Continuation — append to previous line with a space
+                    joinedLines[joinedLines.length - 1] = joinedLines[joinedLines.length - 1].trimEnd() + " " + trimmed;
+                }
+            }
+            const lines = joinedLines;
+            lines.forEach(line => {
+                if (y > pageH - margin) { doc.addPage(); y = margin; }
+                const trimmed = line.trim();
+                const isHeading = /^(PART [AB]|SECTION [AB]|Module\s*[-–]?\s*\d+)$/i.test(trimmed);
+                const isSubHeading = /^\(Answer/i.test(trimmed);
+                const isOR = /^OR$/i.test(trimmed);
+                if (isHeading) {
+                    doc.setFont("helvetica", "bold");
+                    doc.text(trimmed, pageW / 2, y, { align: "center" });
+                } else if (isSubHeading) {
+                    doc.setFont("helvetica", "italic");
+                    doc.text(trimmed, pageW / 2, y, { align: "center" });
+                } else if (isOR) {
+                    doc.setFont("helvetica", "bold");
+                    doc.text("OR", pageW / 2, y, { align: "center" });
+                } else {
+                    doc.setFont("courier", "normal");
+                    // Check if line ends with marks like (3) or (5) etc
+                    const marksMatch = line.match(/^(.*?)\s*(\(\d+\))\s*$/);
+                    if (marksMatch) {
+                        const questionText = marksMatch[1].trimEnd();
+                        const marks = marksMatch[2];
+                        const textWidth = maxWidth - 15;
+                        const textLines = doc.splitTextToSize(questionText, textWidth);
+                        // Print first line with marks on the right
+                        if (y > pageH - margin) { doc.addPage(); y = margin; }
+                        doc.text(textLines[0], margin, y);
+                        doc.text(marks, pageW - margin, y, { align: "right" });
+                        y += 5.5;
+                        // Print remaining lines normally indented
+                        for (let i = 1; i < textLines.length; i++) {
+                            if (y > pageH - margin) { doc.addPage(); y = margin; }
+                            doc.text(textLines[i], margin, y);
+                            y += 5.5;
+                        }
+                        return;
+                    }
+                    // Normal line — wrap within full width
+                    const wrappedLines = doc.splitTextToSize(line, maxWidth);
+                    wrappedLines.forEach(wline => {
+                        if (y > pageH - margin) { doc.addPage(); y = margin; }
+                        doc.text(wline, margin, y);
+                        y += 5.5;
+                    });
+                    return;
+                }
+                y += 5.5;
+            });
+
+            const filename = `${subjectVal.replace(/\s+/g, "_")}_QP.pdf`;
+            doc.save(filename);
+        }
+    </script>
+
+</body>
+
+</html>

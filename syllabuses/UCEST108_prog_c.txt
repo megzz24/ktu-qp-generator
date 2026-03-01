@@ -1,0 +1,42 @@
+COURSE CODE: UCEST108
+SUBJECT: Programming in C
+============================================================
+
+MODULE 1: C Fundamentals and Control Statements
+--------------------------------------------------
+  - Character set, constants, identifiers, keywords
+  - Basic data types, variables
+  - Operators, precedence, bitwise operators, expressions
+  - Input and output statements
+  - Structure of a C program, simple programs
+  - Control statements: if, if-else, nested if, switch
+  - Loops: while, do-while, for, break, continue, nested loops
+
+MODULE 2: Arrays and Strings
+--------------------------------------------------
+  - Single dimensional arrays: definition, initialization, accessing elements
+  - Enumerated data type, type definition
+  - Two-dimensional arrays, matrix processing
+  - Sequential search, bubble sort
+  - Strings: declaration, reading and displaying
+  - String library functions, string matching programs
+
+MODULE 3: Functions, Structures and Storage Classes
+--------------------------------------------------
+  - Functions: definition, call, prototype, parameter passing
+  - Recursion, passing array to function
+  - Macros: defining and calling, command line arguments
+  - Structures: defining, accessing members, array of structures
+  - Passing structure to function, union
+  - Storage classes: automatic, static, external, register
+
+MODULE 4: Pointers and Files
+--------------------------------------------------
+  - Pointer declaration, operations on pointers
+  - Passing pointer to function
+  - Accessing array elements and strings using pointers
+  - Pointer to pointer, array of pointers, pointer to function
+  - Pointer to structure, dynamic memory allocation
+  - File types in C, opening and closing files
+  - Reading and writing files, processing files
+  - File library functions: fseek, ftell, fread, fwrite

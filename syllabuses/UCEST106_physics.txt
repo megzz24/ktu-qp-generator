@@ -1,0 +1,45 @@
+COURSE CODE: UCEST106
+SUBJECT: Physics
+============================================================
+
+MODULE 1: Electrical Conductivity and Superconductivity
+--------------------------------------------------
+  - Classical free electron theory, electrical conductivity in metals
+  - Fermi-Dirac distribution, variation of Fermi function with temperature
+  - Fermi energy, energy bands
+  - Classification of materials: conductor, semiconductor, insulator
+  - Superconductivity: transition temperature, critical field, Meissner effect
+  - Type I and Type II superconductors
+  - BCS theory, applications of superconductors
+
+MODULE 2: Quantum Mechanics
+--------------------------------------------------
+  - Introduction to quantum mechanics
+  - Uncertainty principle: statement and applications
+  - Absence of electron inside nucleus, natural line broadening
+  - Wave function: properties and physical interpretation
+  - Time dependent and time independent Schrodinger equations
+  - Particle in a one-dimensional box: energy eigenvalues, normalized wave function
+  - Quantum mechanical tunnelling (qualitative)
+
+MODULE 3: Semiconductor Physics
+--------------------------------------------------
+  - Intrinsic semiconductor
+  - Density of electrons in conduction band and holes in valence band
+  - Intrinsic carrier concentration and variation with temperature
+  - Extrinsic semiconductor (qualitative)
+  - Formation of p-n junction
+  - Fermi level in intrinsic and extrinsic semiconductors
+  - Energy band diagram of p-n junction
+  - Charge flow across p-n junction, forward and reverse bias
+  - Diode equation derivation, I-V characteristics
+
+MODULE 4: Semiconductor Devices
+--------------------------------------------------
+  - Half wave and full wave rectifiers
+  - Zener diode: V-I characteristics
+  - Tunnel diode: V-I characteristics
+  - Semiconductor laser: construction, working, applications
+  - Photodetectors: junction photodiode
+  - Solar cell: working, V-I characteristics, solar panel
+  - Light emitting diode (LED): working and applications

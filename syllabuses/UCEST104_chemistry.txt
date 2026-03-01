@@ -1,0 +1,48 @@
+COURSE CODE: UCEST104
+SUBJECT: Chemistry
+============================================================
+
+MODULE 1: Electrochemistry and Corrosion
+--------------------------------------------------
+  - Electrochemical cell, electrode potential, Nernst equation (single electrode and cell)
+  - Reference electrodes: SHE and Calomel electrode, construction and working
+  - Electrochemical series, applications
+  - Glass electrode and pH measurement
+  - Conductivity measurement using digital conductivity meter
+  - Li-ion battery and H2-O2 fuel cell (acid electrolyte): construction and working
+  - Corrosion: electrochemical mechanism (acidic and alkaline medium)
+  - Galvanic series, corrosion control methods
+  - Cathodic protection: sacrificial anodic and impressed current
+  - Electroplating and electroless plating of copper
+
+MODULE 2: Materials for Electronic Applications
+--------------------------------------------------
+  - Nanomaterials: classification by dimension and material
+  - Synthesis: sol-gel and chemical reduction
+  - Carbon nanotubes, fullerenes, graphene, carbon quantum dots: structure, properties, applications
+  - Fire retardant polymers: halogenated and non-halogenated
+  - Conducting polymers: polyaniline and polypyrrole, synthesis, properties, applications
+  - OLED: construction, working, applications
+  - Dye-sensitized solar cells (DSSC): construction, working, applications
+  - Materials for quantum computing, supercapacitors, spintronics
+
+MODULE 3: Spectroscopy and Analytical Techniques
+--------------------------------------------------
+  - Spectroscopy: types of spectra, molecular energy levels
+  - Beer-Lambert's law, numerical problems
+  - Electronic spectroscopy: principle, types of electronic transitions, conjugation effect
+  - UV-Vis instrumentation and applications
+  - Vibrational spectroscopy: principle and applications
+  - Thermal analysis: Dielectric Thermal Analysis (DETA) of polymers
+  - Electron microscopy: SEM — principle, instrumentation, applications
+
+MODULE 4: Environmental Chemistry and Water Treatment
+--------------------------------------------------
+  - Water hardness: temporary and permanent, disadvantages, degree of hardness
+  - Water softening: ion exchange process, reverse osmosis
+  - Water disinfection: chlorination, break-point chlorination, ozone, UV irradiation
+  - Dissolved oxygen (DO), BOD, COD: definition and significance
+  - Sewage treatment: primary, secondary, tertiary, trickling filter, UASB process
+  - E-waste: disposal methods — recycle, recovery, reuse
+  - Climate change: greenhouse gases, ozone depletion
+  - Sustainable development and SDGs
