@@ -1,0 +1,89 @@
+COURSE CODE: PCCST303
+SUBJECT: Data Structures
+============================================================
+
+MODULE 1: Basic Concepts of Data Structures
+--------------------------------------------------
+  - Basic Concepts of Data Structures
+  - Definitions; Data Abstraction; Performance Analysis - Time & Space
+  - Multi-Stacks, Queues, Circular Queues, Double Ended Queues; Evaluation
+  - of Expressions- Infix to Postfix, Evaluating Postfix Expressions.
+  - Fundamentals of Data Structures in C
+  - Ellis Horowitz, Sartaj Sahni
+  - and Susan Anderson-Freed,
+  - Universities
+  - Classic Data Structures
+  - Samanta D.
+  - Prentice Hall
+
+MODULE 2: Linked List and Memory Management
+--------------------------------------------------
+  - Linked List and Memory Management
+  - Singly Linked List - Operations on Linked List, Stacks and Queues using
+  - List; Circular Linked List; Memory allocation - First-fit, Best-fit, and
+  - Worst-fit allocation schemes; Garbage collection and compaction.
+  - Introduction to Algorithms
+  - Thomas H Cormen, Charles
+  - Leisesrson, Ronald L
+  - Rivest, Clifford Stein
+  - Data Structures and Algorithms
+  - Aho A. V., J. E.
+  - Hopcroft and J. D.
+  - Publication.
+  - Downloaded from Ktunotes.in
+
+MODULE 3: Trees and Graphs
+--------------------------------------------------
+  - Trees and Graphs
+  - Trees; Binary Search Trees - Binary Search Tree Operations; Binary Heaps
+  - - Binary Heap Operations, Priority Queue.
+  - Downloaded from Ktunotes.in
+  - Breadth First Search; Applications of Graphs  - Single Source All
+  - Destination.
+  - Title of the Book
+  - Name of the Author/s
+  - Name of the
+  - Introduction to Data Structures with
+  - Applications
+  - Tremblay J. P. and P. G.
+  - Tata McGraw
+
+MODULE 4: 2 Hrs. 30 Min.
+--------------------------------------------------
+  - 2 Hrs. 30 Min.
+  - 1. To provide the learner a comprehensive understanding of data structures and algorithms.
+  - Sorting and Searching
+  - Sorting Techniques :- Selection Sort, Insertion Sort, Quick Sort, Merge
+  - Sort, Heap Sort, Radix Sort.
+  - Searching Techniques :- Linear Search, Binary Search, Hashing - Hashing
+  - functions : Mid square, Division, Folding, Digit Analysis; Collision
+  - Resolution :  Linear probing, Quadratic Probing, Double hashing, Open
+  - Attendance
+  - Assignment/
+  - Microproject
+  - In Part A, all questions need to be answered and in Part B, each student can choose any one
+  - full question out of two questions
+  -  2 Questions from each
+  -  Total of 8 Questions, each
+  -  Two questions will be given from each module, out
+  - of which 1 question should be answered.
+  -  Each question can have a maximum of 3 sub
+  - divisions.
+  - Downloaded from Ktunotes.in
+  - Level (KL)
+  - Identify appropriate data structures for solving real world problems.
+  - Describe and implement linear data structures such as arrays, linked
+  - lists, stacks, and queues.
+  - Describe and Implement non linear data structures such as trees and
+  - Select appropriate searching and sorting algorithms to be used in
+  - specific circumstances.
+  - Note: K1- Remember, K2- Understand, K3- Apply, K4- Analyse, K5- Evaluate, K6- Create
+  - Note: 1: Slight (Low), 2: Moderate (Medium), 3: Substantial (High), -: No Correlation
+  - Title of the Book
+  - Name of the Author/s
+  - Name of the
+  - Theory and Problems of Data
+  - Structures
+  - Lipschuts S.
+  - Schaum’s Series
+  - Video Links (NPTEL, SWAYAM…)

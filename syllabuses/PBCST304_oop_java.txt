@@ -1,0 +1,230 @@
+COURSE CODE: PBCST304
+SUBJECT: Object Oriented Programming
+============================================================
+
+MODULE 1: Introduction to Java:
+--------------------------------------------------
+  - Introduction to Java:
+  - Structure of a simple java program; Java programming Environment and
+  - Runtime Environment (Command Line & IDE); Java compiler; Java Virtual
+  - Machine; Primitive Data types and Wrapper Types; Casting and Autoboxing;
+  - Arrays; Strings; Vector class; Operators - Arithmetic, Bitwise, Relational,
+  - Boolean Logical, Assignment, Conditional (Ternary); Operator Precedence;
+  - Control Statements - Selection Statements, Iteration Statements and Jump
+  - Statements; Functions; Command Line Arguments; Variable Length
+  - Arguments; Classes; Abstract Classes; Interfaces. [Use proper naming
+  - conventions]
+  - OOP Concepts :-
+  - Data abstraction, encapsulation, inheritance, polymorphism, Procedural and
+  - Downloaded from Ktunotes.in
+  - object oriented programming paradigm; Microservices.
+  - Object Oriented Programming in Java :-
+  - Declaring Objects; Object Reference; Introduction to Methods; Constructors;
+  - Access Modifiers; this keyword.
+  - Java: The Complete Reference
+  - Herbert Schildt
+  - Tata McGraw Hill
+  - 13/e, 2024
+  - Head First Java: A Brain
+  - Friendly Guide
+  - Kathy Sierra & Bert
+  - Project Planning and Proposal
+
+MODULE 2: Polymorphism :-
+--------------------------------------------------
+  - Polymorphism :-
+  - Method Overloading, Using Objects as Parameters, Returning Objects,
+  - Recursion.
+  - Static Members, Final Variables, Inner Classes.
+  - Inheritance - Super Class, Sub Class, Types of Inheritance, The super
+  - keyword, protected Members, Calling Order of Constructors.
+  - Method Overriding, Dynamic Method Dispatch, Using final with
+  - Inheritance.
+  - Introduction to Java Programming,
+  - Comprehensive Version
+  - Y Daniel Liang
+  - 10/e, 2014
+  - JAVA™ for Programmers
+  - Paul Deitel
+  - 11/e, 2018
+
+MODULE 3: Packages and Interfaces –
+--------------------------------------------------
+  - Packages and Interfaces –
+  - Packages - Defining a Package, CLASSPATH, Access Protection, Importing
+  - Interfaces - Interfaces v/s Abstract classes, defining an interface,
+  - implementing interfaces, accessing implementations through interface
+  - Exception Handling - Checked Exceptions, Unchecked Exceptions, try
+  - Block and catch Clause, Multiple catch Clauses, Nested try Statements,
+  - throw, throws and finally, Java Built-in Exceptions, Custom Exceptions.
+  - Introduction to design patterns in Java : Singleton and Adaptor.
+  - Head First Design Patterns
+  - Eric Freeman, Elisabeth
+  - Robson, Bert Bates,
+  - Kathy Sierra
+  - O'Reilly Media
+  - Title of the Book
+  - Name of the Author/s
+  - Name of the
+  - Clean Code : A Handbook of
+  - Agile Software Craftsmanship
+  - Robert C. Martin
+  - Prentice Hall
+  - Downloaded from Ktunotes.in
+  - Video Links (NPTEL, SWAYAM…)
+  - Involvement in the project work and Team Work
+  - Clarity and feasibility of the project plan
+  - Defined objectives and methodology
+  - Effectiveness in answering questions and handling feedback
+  - Active participation and individual contribution
+  - Teamwork and collaboration
+  - Adherence to the project timeline and milestones
+  - Application of theoretical knowledge and problem-solving
+  - Final Result
+  - Effectiveness in answering questions
+  - Overall quality and technical excellence of the project
+  - Innovation and originality in the project
+  - Creativity in solutions and approaches
+
+MODULE 4: 2 Hrs. 30 Min.
+--------------------------------------------------
+  - 2 Hrs. 30 Min.
+  - 1. To teach the core object-oriented principles such as abstraction, encapsulation, inheritance, and
+  - polymorphism, robust error-handling using exception mechanisms to ensure program
+  - reliability.
+  - 2. To equip the learner to develop object oriented programs encompassing fundamental
+  - structures, environments, and the effective utilization of data types, arrays, strings, operators,
+  - and control statements for program flow in Java.
+  - 3. To enable the learner to design and develop event-driven graphical user interface (GUI)
+  - database applications using Swing and  database connection components.
+  - SOLID Principles in Java (https://www.javatpoint.com/solid-principles-
+  - Swings fundamentals – Overview of AWT, Swing v/s AWT, Swing Key
+  - Features, Model View Controller (MVC), Swing Controls, Components and
+  - Containers, Swing Packages, Event Handling in Swings, Swing Layout
+  - Managers, Exploring Swings–JFrame, JLabel, The Swing Buttons,
+  - JTextField.
+  - Event handling – Event Handling Mechanisms, Delegation Event Model,
+  - Event Classes, Sources  of Events, Event Listener Interfaces, Using the
+  - Delegation Event Model.
+  - Developing Database Applications using JDBC – JDBC overview, Types,
+  - Downloaded from Ktunotes.in
+  - Steps, Common JDBC Components, Connection Establishment, SQL
+  - Fundamentals [For projects only] - Creating and Executing basic SQL
+  - Queries, Working with Result Set, Performing CRUD Operations with
+  - Suggestion on Project Topics
+  - Student should Identify a topic to be implemented as project having the following  nature
+  - i. It must accept a considerable amount of information from the user for processing.
+  - ii. It must have a considerable amount of data to be stored permanently within the computer -
+  - as plain files / using databases..
+  - It must process the user provided data and the stored data to generate some output to
+  - be displayed to the user.
+  - Examples : -
+  - 1. Design and implement the Circulation function in a Library Management System using
+  - Object-Oriented Programming (OOP) principles in Java and limited use of SQL. The system
+  - should manage the operations of a library, such as book & user management, borrowing and
+  - returning books.
+  - Requirements
+  - Class Design
+  - ● Book: Attributes like title, author, ISBN, genre, and status (available/borrowed).
+  - ● Library: Attributes like a list of books and a list of users.
+  - ● Librarian: Inherits from User, with additional functionalities like adding/removing
+  - books and managing users.
+  - ● BorrowTransaction: Attributes like transaction ID, book, user, borrow date, and
+  - return date
+  - Functionalities
+  - a.  Book Management:
+  - ● Add, remove, and update book details.
+  - ● Search books by title, author, ISBN, and genre.
+  - b. User Management:
+  - ● Register new users.
+  - ● Search users by user ID and name.
+  - c. Borrowing and Returning:
+  - ● Borrow a book: Check if the book is available and if the user can borrow
+  - more books.
+  - ● Return a book: Update the book’s status and remove it from the user’s
+  - borrowed list.
+  - Deliverables
+  - 1. Design Document: Describe the classes, their attributes, methods and relationships.
+  - 2. Source Code: Well-documented Java code implementing the described functionalities.
+  - 3. User Manual: Instructions on how to set up, run and use the system.
+  - 4. Test Cases: A suite of test cases demonstrating the functionality of the system.
+  - 2. Design and implement an Online Payment Processing System using Object-Oriented
+  - Programming(OOP) principles in Java, with a focus on dynamic polymorphism. The system
+  - should support different types of payment methods and demonstrate polymorphism in
+  - processing payments.
+  - a.  Class Design
+  - ● Payment: An abstract base class with common attributes and an abstract method for
+  - ● CreditCardPayment: Inherits from Payment, with specific implementation for processing
+  - credit card payments.
+  - ● PayPalPayment: Inherits from Payment, with specific implementation for processing
+  - PayPal payments.
+  - ● BankTransferPayment: Inherits from Payment, with specific implementation for
+  - processing bank transfer payments.
+  - ● PaymentProcessor: A class to manage and process different types of payments.
+  - b.  Functionalities
+  - ● Add Payment Method: Add new payment methods (CreditCardPayment, PayPalPayment,
+  - BankTransferPayment) to the system.
+  - ● Process Payment: Demonstrate dynamic polymorphism by processing payments using
+  - different methods.
+  - c. Deliverables
+  - ● Design Document: Describe the classes, their attributes, methods and relationships.
+  - ● Source Code: Well-documented Java code implementing the described functionalities.
+  - ● User Manual: Instructions on how to set up, run and use the system.
+  - ● Test Cases: A suite of test cases demonstrating the functionality of the system.
+  - Attendance
+  - Internal Ex-1
+  - Internal Ex-2
+  - In Part A, all questions need to be answered and in Part B, each student can choose any one
+  - full question out of two questions
+  - Level (KL)
+  - Explain the process of writing, compiling, and executing basic Java programs,
+  - object-oriented programming principles
+  - design and
+  - implementation of Java applications.
+  - Develop and manage Java packages and interfaces, enhancing code
+  - modularity and reusability.
+  - Implement error handling using Java's exception mechanisms and leverage
+  - interfaces for modular applications.
+  - Develop event-driven Java GUI applications with database connectivity using
+  - Swing and JDBC.
+  - Note: K1- Remember, K2- Understand, K3- Apply, K4- Analyse, K5- Evaluate, K6- Create
+  - 2 Questions from each
+  - Total of 8 Questions,
+  - 2 questions will be given from each module,
+  - out of which 1 question should be answered.
+  - Each question can have a maximum of 2
+  - subdivisions. E
+  - CO-PO Mapping Table:
+  - Note: 1: Slight (Low), 2: Moderate (Medium), 3: Substantial (High), -: No Correlation
+  - Title of the Book
+  - Name of the Author/s
+  - Name of the
+  - Programming with Java
+  - E Balagurusamy
+  - McGraw Hill
+  - Java For Dummies
+  - Barry A. Burd
+  - Effective Java
+  - Joshua Bloch
+  - L: Lecture
+  - R: Project (1 Hr.), 2 Faculty Members
+  - Project identification
+  - Simulation/
+  - Laboratory
+  - discussion
+  - Project Analysis
+  - Data Collection
+  - Evaluation
+  - Brainstorming
+  - Analytical
+  - and  self-learning
+  - Project Milestone Reviews,
+  - reformation
+  - Guest Speakers
+  - Survey Report
+  - Prototyping
+  - 5 minutes video
+  - Assessment and Evaluation for Project Activity
+  - Evaluation for
+  - Execution and Implementation
+  - Project Quality, Innovation and Creativity
