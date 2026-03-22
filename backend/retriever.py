@@ -6,8 +6,10 @@ from sentence_transformers import SentenceTransformer
 # CONFIG
 # -----------------------------------------------
 
-INDEX_PATH = "faiss/ktu_index.faiss"
-META_PATH = "faiss/ktu_index_meta.pkl"
+import os
+BASE_DIR   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+INDEX_PATH = os.path.join(BASE_DIR, "faiss", "ktu_index.faiss")
+META_PATH  = os.path.join(BASE_DIR, "faiss", "ktu_index_meta.pkl")
 MODEL_NAME = "all-MiniLM-L6-v2"
 
 # -----------------------------------------------

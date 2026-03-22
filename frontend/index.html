@@ -1,473 +1,1544 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>KTU Question Paper Generator</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KTU Question Paper Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] },
+    options: { skipHtmlTags: ['script','noscript','style','textarea'] },
+    startup: { typeset: false }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
 
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #f0f2f5;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px 20px;
-        }
+<style>
+/* ===================== RESET ===================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        header {
-            text-align: center;
-            margin-bottom: 32px;
-        }
+/* ===================== TOKENS ===================== */
+:root {
+  --navy:       #0d1f35;
+  --navy-mid:   #162c46;
+  --navy-light: #1e3a56;
+  --gold:       #c8922a;
+  --gold-light: #f0c060;
+  --cream:      #f8f5ef;
+  --cream-dark: #ede9e0;
+  --paper:      #fdfcfa;
+  --rule:       #ddd8ce;
+  --ink:        #1a1714;
+  --muted:      #7a7469;
+  --red:        #b83232;
+  --green:      #1a6640;
 
-        header h1 {
-            font-size: 1.8rem;
-            color: #1a3a5c;
-        }
+  --ff-serif: 'Crimson Pro', Georgia, serif;
+  --ff-sans:  'Inter', system-ui, sans-serif;
+  --ff-mono:  'IBM Plex Mono', 'Courier New', monospace;
 
-        header p {
-            color: #666;
-            margin-top: 6px;
-            font-size: 0.95rem;
-        }
+  --r: 8px;
+  --r-sm: 5px;
+  --shadow: 0 2px 12px rgba(0,0,0,.10);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.14);
+}
 
-        .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-            padding: 28px 32px;
-            width: 100%;
-            max-width: 860px;
-            margin-bottom: 24px;
-        }
+html { font-size: 16px; }
+body {
+  font-family: var(--ff-sans);
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
-        .card h2 {
-            font-size: 1rem;
-            color: #333;
-            margin-bottom: 16px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
+/* ===================== HEADER ===================== */
+.site-header {
+  background: var(--navy);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 58px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 16px rgba(0,0,0,.25);
+  border-bottom: 2px solid var(--gold);
+}
+.header-left { display: flex; align-items: baseline; gap: .75rem; }
+.header-title {
+  font-family: var(--ff-serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+  color: #fff;
+}
+.header-subtitle {
+  font-size: .72rem;
+  color: rgba(255,255,255,.45);
+  font-family: var(--ff-mono);
+  letter-spacing: .06em;
+}
+.header-badge {
+  font-family: var(--ff-mono);
+  font-size: .62rem;
+  background: rgba(200,146,42,.2);
+  color: var(--gold-light);
+  border: 1px solid rgba(200,146,42,.35);
+  padding: 2px 8px;
+  border-radius: 99px;
+  letter-spacing: .08em;
+}
 
-        .form-row {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            align-items: flex-end;
-        }
+/* ===================== LAYOUT ===================== */
+.app-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  flex: 1;
+  min-height: calc(100vh - 58px);
+}
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            flex: 1;
-            min-width: 200px;
-        }
+/* ===================== SIDEBAR ===================== */
+.sidebar {
+  background: var(--navy-mid);
+  color: #fff;
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: sticky;
+  top: 58px;
+  height: calc(100vh - 58px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.15) transparent;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 4px; }
 
-        label {
-            font-size: 0.85rem;
-            color: #555;
-            font-weight: 500;
-        }
+.sb-section-title {
+  font-family: var(--ff-mono);
+  font-size: .65rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.38);
+  margin-bottom: .6rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.sb-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,.12);
+}
 
-        select {
-            padding: 10px 14px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            color: #333;
-            background: #fafafa;
-            appearance: none;
-            cursor: pointer;
-        }
+.field { display: flex; flex-direction: column; gap: .4rem; }
+.field label {
+  font-size: .78rem;
+  font-weight: 500;
+  color: rgba(255,255,255,.65);
+  letter-spacing: .02em;
+}
 
-        select:focus {
-            outline: none;
-            border-color: #1a3a5c;
-        }
+select, input[type="text"] {
+  width: 100%;
+  font-family: var(--ff-sans);
+  font-size: .88rem;
+  color: #fff;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: var(--r-sm);
+  padding: .55rem .75rem;
+  outline: none;
+  transition: border-color .15s, background .15s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+select { cursor: pointer; }
+select option { background: #162c46; color: #fff; }
+select:focus, input[type="text"]:focus {
+  border-color: var(--gold);
+  background: rgba(255,255,255,.11);
+}
+input[type="text"]::placeholder { color: rgba(255,255,255,.28); }
 
-        button {
-            padding: 10px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
+/* select arrow */
+.select-wrap { position: relative; }
+.select-wrap::after {
+  content: '▾';
+  position: absolute;
+  right: .65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: .75rem;
+  color: rgba(255,255,255,.4);
+}
 
-        #generateBtn {
-            background: #1a3a5c;
-            color: white;
-        }
+/* ---- typography controls ---- */
+.typo-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .6rem;
+}
+.font-size-control { display: flex; flex-direction: column; gap: .4rem; }
+.font-size-control label { font-size: .78rem; font-weight: 500; color: rgba(255,255,255,.65); }
+.size-slider-row { display: flex; align-items: center; gap: .5rem; }
+input[type="range"] {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 3px;
+  background: rgba(255,255,255,.18);
+  border-radius: 99px;
+  outline: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--gold);
+  cursor: pointer;
+}
+.size-val {
+  font-family: var(--ff-mono);
+  font-size: .75rem;
+  color: var(--gold-light);
+  min-width: 28px;
+  text-align: center;
+}
 
-        #generateBtn:hover {
-            background: #14304d;
-        }
+/* ---- buttons ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  font-family: var(--ff-sans);
+  font-size: .88rem;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--r-sm);
+  padding: .6rem 1.1rem;
+  cursor: pointer;
+  transition: filter .15s, opacity .15s, transform .1s;
+  white-space: nowrap;
+}
+.btn:active { transform: scale(.97); }
+.btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+.btn:hover:not(:disabled) { filter: brightness(1.08); }
 
-        #generateBtn:disabled {
-            background: #aaa;
-            cursor: not-allowed;
-        }
+.btn-primary {
+  background: var(--gold);
+  color: var(--navy);
+  font-weight: 600;
+  width: 100%;
+  padding: .7rem;
+  font-size: .92rem;
+}
+.btn-secondary {
+  background: rgba(255,255,255,.1);
+  color: rgba(255,255,255,.85);
+  border: 1px solid rgba(255,255,255,.15);
+  width: 100%;
+}
+.btn-danger-soft {
+  background: rgba(184,50,50,.15);
+  color: #ff9999;
+  border: 1px solid rgba(184,50,50,.3);
+  font-size: .78rem;
+  padding: .35rem .7rem;
+}
+.btn-regen-q {
+  background: rgba(200,146,42,.12);
+  color: var(--gold-light);
+  border: 1px solid rgba(200,146,42,.25);
+  font-size: .72rem;
+  padding: .28rem .6rem;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity .15s, filter .15s;
+  flex-shrink: 0;
+}
+.btn-download {
+  background: var(--green);
+  color: #fff;
+}
 
-        #downloadBtn {
-            background: #c0922a;
-            color: white;
-        }
+/* ===================== MAIN PANEL ===================== */
+.main-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--cream);
+  min-height: calc(100vh - 58px);
+}
 
-        #downloadBtn:hover {
-            background: #a87a22;
-        }
+/* ---- empty state ---- */
+.empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--muted);
+  padding: 3rem;
+}
+.empty-icon {
+  font-size: 3rem;
+  opacity: .25;
+}
+.empty-state h2 {
+  font-family: var(--ff-serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #bbb5ab;
+}
+.empty-state p { font-size: .88rem; color: #c5bfb5; text-align: center; max-width: 320px; }
 
-        .loader {
-            display: none;
-            align-items: center;
-            gap: 10px;
-            color: #666;
-            font-size: 0.9rem;
-            margin-top: 12px;
-        }
+/* ---- loader ---- */
+.loader-overlay {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 3rem;
+}
+.loader-overlay.active { display: flex; }
+.loader-ring {
+  width: 48px; height: 48px;
+  border: 3px solid var(--rule);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin .85s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loader-text {
+  font-size: .9rem;
+  color: var(--muted);
+  text-align: center;
+  max-width: 340px;
+  line-height: 1.6;
+}
+.loader-text strong { color: var(--ink); }
 
-        .loader.active {
-            display: flex;
-        }
+/* ---- error ---- */
+.error-bar {
+  display: none;
+  margin: 1rem 1.5rem 0;
+  padding: .75rem 1rem;
+  background: #fff0f0;
+  border: 1px solid #f5c6c6;
+  border-radius: var(--r-sm);
+  color: var(--red);
+  font-size: .875rem;
+}
+.error-bar.show { display: block; }
 
-        .spinner {
-            width: 18px;
-            height: 18px;
-            border: 2px solid #ddd;
-            border-top-color: #1a3a5c;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
+/* ===================== OUTPUT ===================== */
+.output-section {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+}
+.output-section.show { display: flex; }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+/* top toolbar */
+.output-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .875rem 1.5rem;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  gap: 1rem;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 58px;
+  z-index: 50;
+  box-shadow: var(--shadow);
+}
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+.toolbar-title {
+  font-family: var(--ff-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+.toolbar-meta {
+  font-family: var(--ff-mono);
+  font-size: .68rem;
+  color: var(--muted);
+  background: var(--cream-dark);
+  padding: 3px 8px;
+  border-radius: 99px;
+}
+.toolbar-right { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
 
-        #error {
-            display: none;
-            background: #fff0f0;
-            border: 1px solid #f5c6c6;
-            color: #c0392b;
-            padding: 10px 14px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            margin-top: 12px;
-        }
+/* view toggle */
+.view-toggle {
+  display: flex;
+  background: var(--cream-dark);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+}
+.view-toggle button {
+  background: none;
+  border: none;
+  padding: .38rem .75rem;
+  font-size: .78rem;
+  font-family: var(--ff-sans);
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  border-radius: 0;
+}
+.view-toggle button.active {
+  background: var(--navy);
+  color: #fff;
+}
 
-        #outputSection {
-            display: none;
-        }
+/* ---- QP paper container ---- */
+.qp-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem 1.5rem;
+  display: flex;
+  justify-content: center;
+  background: var(--cream);
+}
 
-        .output-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
+/* the paper itself */
+.qp-paper {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-lg);
+  padding: 2.5rem 3rem;
+  width: 100%;
+  max-width: 760px;
+  min-height: 900px;
+  position: relative;
 
-        textarea {
-            width: 100%;
-            min-height: 560px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.88rem;
-            line-height: 1.6;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 16px;
-            resize: vertical;
-            color: #222;
-            background: #fafafa;
-        }
+  /* user-controllable */
+  font-family: var(--ff-serif);
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--ink);
+}
 
-        textarea:focus {
-            outline: none;
-            border-color: #1a3a5c;
-        }
+/* paper header */
+.qp-header {
+  text-align: center;
+  border-bottom: 2px solid var(--navy);
+  padding-bottom: 1rem;
+  margin-bottom: 1.25rem;
+}
+.qp-univ {
+  font-family: var(--ff-sans);
+  font-size: .82rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--navy);
+}
+.qp-exam-title {
+  font-size: .82rem;
+  font-family: var(--ff-sans);
+  color: var(--muted);
+  margin: .2rem 0;
+}
+.qp-course-code {
+  font-family: var(--ff-mono);
+  font-size: .78rem;
+  color: var(--navy);
+  margin-top: .3rem;
+}
+.qp-course-name {
+  font-family: var(--ff-sans);
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: .25rem 0;
+}
+.qp-meta-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--ff-sans);
+  font-size: .78rem;
+  color: var(--muted);
+  margin-top: .5rem;
+}
+.qp-reg-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--ff-sans);
+  font-size: .78rem;
+  color: var(--muted);
+  margin-bottom: .4rem;
+}
+.qp-qpcode {
+  font-family: var(--ff-mono);
+  font-size: .8rem;
+  font-weight: 500;
+  text-align: center;
+  color: var(--navy);
+  margin-bottom: .4rem;
+}
 
-        .hint {
-            font-size: 0.8rem;
-            color: #999;
-            margin-top: 8px;
-        }
-    </style>
+/* part headings */
+.part-heading {
+  font-family: var(--ff-sans);
+  font-weight: 700;
+  font-size: .92rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--navy);
+  background: #eef2f7;
+  border: 1px solid #c8d4e3;
+  border-radius: var(--r-sm);
+  padding: .4rem 0;
+  margin: 1.25rem 0 .3rem;
+}
+.part-instruction {
+  text-align: center;
+  font-size: .83rem;
+  font-style: italic;
+  color: var(--muted);
+  margin-bottom: .85rem;
+  font-family: var(--ff-sans);
+}
+.module-heading {
+  font-family: var(--ff-sans);
+  font-weight: 600;
+  font-size: .85rem;
+  letter-spacing: .04em;
+  color: var(--navy-light);
+  border-left: 3px solid var(--gold);
+  padding-left: .6rem;
+  margin: 1rem 0 .5rem;
+}
+.or-divider {
+  text-align: center;
+  font-family: var(--ff-sans);
+  font-weight: 700;
+  font-size: .78rem;
+  color: var(--muted);
+  letter-spacing: .12em;
+  margin: .5rem 0;
+  position: relative;
+}
+.or-divider::before, .or-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: calc(50% - 28px);
+  height: 1px;
+  background: var(--rule);
+}
+.or-divider::before { left: 0; }
+.or-divider::after { right: 0; }
+
+/* ---- question rows ---- */
+.question-row {
+  display: flex;
+  align-items: flex-start;
+  gap: .5rem;
+  padding: .35rem .4rem;
+  border-radius: 5px;
+  transition: background .12s;
+  margin-bottom: .15rem;
+}
+.question-row:hover { background: rgba(200,146,42,.06); }
+.question-row:hover .btn-regen-q { opacity: 1; }
+
+.q-number {
+  font-family: var(--ff-mono);
+  font-size: .82rem;
+  font-weight: 500;
+  color: var(--navy);
+  min-width: 28px;
+  padding-top: .12rem;
+  flex-shrink: 0;
+}
+.q-body { flex: 1; }
+.q-text { display: inline; }
+.q-marks {
+  font-family: var(--ff-mono);
+  font-size: .8rem;
+  color: var(--gold);
+  font-weight: 600;
+  flex-shrink: 0;
+  padding-top: .12rem;
+}
+
+.subpart-row {
+  display: flex;
+  align-items: flex-start;
+  gap: .5rem;
+  padding-left: 1.2rem;
+  padding-top: .2rem;
+  padding-bottom: .1rem;
+  border-radius: 5px;
+  margin-bottom: .1rem;
+  transition: background .12s;
+}
+.subpart-row:hover { background: rgba(200,146,42,.06); }
+.subpart-row:hover .btn-regen-q { opacity: 1; }
+.sub-label {
+  font-family: var(--ff-mono);
+  font-size: .8rem;
+  color: var(--muted);
+  min-width: 22px;
+  padding-top: .1rem;
+  flex-shrink: 0;
+}
+
+/* ---- raw textarea view ---- */
+.raw-view {
+  display: none;
+  flex: 1;
+  padding: 1.5rem;
+}
+.raw-view.show { display: flex; }
+.raw-textarea {
+  flex: 1;
+  font-family: var(--ff-mono);
+  font-size: .85rem;
+  line-height: 1.7;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  padding: 1.25rem;
+  resize: vertical;
+  outline: none;
+  min-height: 600px;
+  width: 100%;
+  transition: border-color .15s;
+}
+.raw-textarea:focus { border-color: var(--navy); }
+
+/* ---- inline regen spinner ---- */
+.q-regen-spinner {
+  display: inline-block;
+  width: 13px; height: 13px;
+  border: 2px solid var(--rule);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+/* ---- status pill ---- */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-family: var(--ff-mono);
+  font-size: .67rem;
+  padding: 3px 9px;
+  border-radius: 99px;
+  letter-spacing: .04em;
+}
+.status-pill.generating {
+  background: rgba(200,146,42,.12);
+  color: var(--gold);
+  border: 1px solid rgba(200,146,42,.3);
+}
+.status-pill.done {
+  background: rgba(26,102,64,.1);
+  color: var(--green);
+  border: 1px solid rgba(26,102,64,.25);
+}
+
+/* ---- hint bar ---- */
+.hint-bar {
+  padding: .5rem 1.5rem;
+  font-size: .78rem;
+  color: var(--muted);
+  border-top: 1px solid var(--rule);
+  background: var(--paper);
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+/* ---- LaTeX ---- */
+.MJX-TEX, mjx-container { font-size: inherit !important; }
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 820px) {
+  .app-layout { grid-template-columns: 1fr; }
+  .sidebar {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: .75rem;
+    padding: 1rem;
+  }
+  .sidebar > * { min-width: 200px; flex: 1; }
+  .qp-paper { padding: 1.5rem 1.25rem; }
+}
+
+/* ===================== ANIMATIONS ===================== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.qp-paper { animation: fadeIn .35s ease; }
+</style>
 </head>
-
 <body>
 
-    <header>
-        <h1>KTU Question Paper Generator</h1>
-        <p>Model Engineering College &nbsp;|&nbsp; Department of Computer Science and Engineering</p>
-    </header>
+<!-- ===== HEADER ===== -->
+<header class="site-header">
+  <div class="header-left">
+    <span class="header-title">KTU Question Paper Generator</span>
+    <span class="header-subtitle">MEC · CSE Dept</span>
+  </div>
+</header>
 
-    <!-- Input Card -->
-    <div class="card">
-        <h2>Generate Question Paper</h2>
-        <div class="form-row">
+<div class="app-layout">
 
-            <div class="form-group">
-                <label for="semester">Semester</label>
-                <select id="semester">
-                    <option value="1 &amp; 2">Semester 1 &amp; 2</option>
-                </select>
-            </div>
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar">
+
+    <div>
+      <div class="sb-section-title">Paper Details</div>
+      <div style="display:flex;flex-direction:column;gap:.75rem">
+
+        <div class="field">
+          <label>Semester</label>
+          <div class="select-wrap">
+            <select id="semester">
+              <option value="1 &amp; 2">Semester 1 &amp; 2</option>
+            </select>
+          </div>
+        </div>
 
             <div class="form-group">
                 <label for="subject">Subject</label>
                 <select id="subject" onchange="onSubjectChange()">
+                    <option value="Mathematics 1">Mathematics for Information Science – 1</option>
                     <option value="Python">Algorithmic Thinking with Python</option>
                     <option value="Electrical and Electronics">Intro to Electrical &amp; Electronics Engg</option>
+                    <option value="Engineering Graphics">Engineering Graphics and CAD</option>
                     <option value="Chemistry">Chemistry for Information Science</option>
                     <option value="Physics">Physics for Information Science</option>
+                    <option value="Mathematics 2">Mathematics for Information Science – 2</option>
                     <option value="Programming in C">Programming in C</option>
                     <option value="Foundations of Computing">Foundations of Computing</option>
                     <option value="Engineering Entrepreneurship and IPR">Engineering Entrepreneurship and IPR</option>
+                    <option value="Discrete Mathematics">Discrete Mathematics</option>
+                    <option value="LSPC">Life Skills and Professional Communication</option>
+                    <option value="Health and Wellness">Health and Wellness</option>
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="qpCode">QP Code</label>
-                <input type="text" id="qpCode" placeholder="e.g. 03UCEST105122402"
-                    style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:0.95rem;background:#fafafa;" />
-            </div>
-
-            <div class="form-group">
-                <label for="examTitle">Exam Title</label>
-                <input type="text" id="examTitle" placeholder="e.g. Regular Examination December 2024"
-                    style="padding:10px 14px;border:1px solid #ddd;border-radius:8px;font-size:0.95rem;background:#fafafa;" />
-            </div>
-
-            <button id="generateBtn" onclick="generate()">Generate</button>
+        <div class="field">
+          <label>QP Code</label>
+          <input type="text" id="qpCode" placeholder="e.g. 03UCEST105122402" />
         </div>
+
+        <div class="field">
+          <label>Exam Title</label>
+          <input type="text" id="examTitle" placeholder="e.g. Regular Examination Dec 2024" />
+        </div>
+
+      </div>
+    </div>
 
         <div class="loader" id="loader">
             <div class="spinner"></div>
-            Generating question paper, please wait... 
+            Generating question paper, please wait... (takes 6-8 minutes due to API rate limits)
         </div>
 
-        <div id="error"></div>
-    </div>
-
-    <!-- Output Card -->
-    <div class="card" id="outputSection">
-        <div class="output-header">
-            <h2>Question Paper</h2>
-            <button id="downloadBtn" onclick="downloadPDF()">Download PDF</button>
+        <div class="font-size-control">
+          <label>Font Size</label>
+          <div class="size-slider-row">
+            <input type="range" id="fontSize" min="11" max="20" value="15" oninput="applyTypography()" />
+            <span class="size-val" id="fontSizeVal">15px</span>
+          </div>
         </div>
-        <textarea id="output" spellcheck="false"></textarea>
-        <p class="hint">You can edit the question paper above before downloading.</p>
+
+        <div class="font-size-control">
+          <label>Line Height</label>
+          <div class="size-slider-row">
+            <input type="range" id="lineHeight" min="13" max="28" value="18" oninput="applyTypography()" />
+            <span class="size-val" id="lineHeightVal">1.8</span>
+          </div>
+        </div>
+
+      </div>
     </div>
 
-    <script>
-        const API_URL = "http://localhost:5000";
+    <div style="display:flex;flex-direction:column;gap:.5rem;margin-top:auto">
+      <button class="btn btn-primary" id="generateBtn" onclick="generate()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Generate Paper
+      </button>
+      <button class="btn btn-secondary" id="regenBtn" onclick="regenerateFull()" style="display:none">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Regenerate Whole Paper
+      </button>
+      <button class="btn btn-download" id="downloadBtn" onclick="downloadPDF()" style="display:none">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download PDF
+      </button>
+    </div>
+
+  </aside>
+
+  <!-- ===== MAIN ===== -->
+  <main class="main-panel">
+
+    <!-- Error -->
+    <div class="error-bar" id="errorBar"></div>
+
+    <!-- Empty state -->
+    <div class="empty-state" id="emptyState">
+      <div class="empty-icon">📄</div>
+      <h2>No paper generated yet</h2>
+      <p>Select a subject and click <strong>Generate Paper</strong> to create a KTU-format question paper.</p>
+    </div>
+
+    <!-- Loader -->
+    <div class="loader-overlay" id="loaderOverlay">
+      <div class="loader-ring"></div>
+      <div class="loader-text">
+        <strong>Generating question paper…</strong><br/>
+        This may take a minute. The model is crafting questions<br/>module by module based on your syllabus.
+      </div>
+    </div>
+
+    <!-- Output -->
+    <div class="output-section" id="outputSection">
+
+      <!-- Toolbar -->
+      <div class="output-toolbar">
+        <div class="toolbar-left">
+          <span class="toolbar-title" id="toolbarTitle">Question Paper</span>
+          <span class="toolbar-meta" id="toolbarMeta"></span>
+          <span class="status-pill done" id="statusPill">✓ Ready</span>
+        </div>
+        <div class="toolbar-right">
+          <div class="view-toggle">
+            <button class="active" id="viewRendered" onclick="setView('rendered')">Rendered</button>
+            <button id="viewRaw" onclick="setView('raw')">Raw / Edit</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rendered paper view -->
+      <div class="qp-container" id="renderedView">
+        <div class="qp-paper" id="qpPaper">
+          <!-- dynamically filled -->
+        </div>
+      </div>
+
+      <!-- Raw / edit view -->
+      <div class="raw-view" id="rawView">
+        <textarea class="raw-textarea" id="rawTextarea" spellcheck="false" oninput="onRawEdit()"></textarea>
+      </div>
+
+      <div class="hint-bar" id="hintBar">
+        💡 Hover any question to reveal a regenerate button for that individual question.
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<script>
+/* ================================================================
+   STATE
+================================================================ */
+const API_URL = "http://localhost:5000";
 
         const SUBJECT_MAP = {
+            "Mathematics 1": { code: "GAMAT101", label: "MATHEMATICS FOR INFORMATION SCIENCE – 1" },
             "Python": { code: "UCEST105", label: "ALGORITHMIC THINKING WITH PYTHON" },
             "Electrical and Electronics": { code: "GXEST104", label: "INTRODUCTION TO ELECTRICAL AND ELECTRONICS ENGINEERING" },
             "Chemistry": { code: "GXCY122", label: "CHEMISTRY FOR INFORMATION SCIENCE AND ELECTRICAL SCIENCE" },
             "Physics": { code: "GAPHT121", label: "PHYSICS FOR INFORMATION SCIENCE" },
+            "Mathematics 2": { code: "GAMAT201", label: "MATHEMATICS FOR INFORMATION SCIENCE – 2" },
             "Programming in C": { code: "GXEST204", label: "PROGRAMMING IN C" },
             "Foundations of Computing": { code: "GXEST203", label: "FOUNDATIONS OF COMPUTING: FROM HARDWARE ESSENTIALS TO WEB DESIGN" },
             "Engineering Entrepreneurship and IPR": { code: "UCEST206", label: "ENGINEERING ENTREPRENEURSHIP AND IPR" },
+            "Discrete Mathematics": { code: "PCCST205", label: "DISCRETE MATHEMATICS" },
         };
 
-        function onSubjectChange() {
-            const val = document.getElementById("subject").value;
-            const info = SUBJECT_MAP[val];
-            // course code is auto-used in PDF from SUBJECT_MAP, no display field needed
-        }
+/* ================================================================
+   SUBJECT CHANGE
+================================================================ */
+function onSubjectChange() {}   // reserved for future use
 
-        window.addEventListener("DOMContentLoaded", () => { onSubjectChange(); });
+/* ================================================================
+   TYPOGRAPHY
+================================================================ */
+function applyTypography() {
+  const paper = document.getElementById('qpPaper');
+  if (!paper) return;
+  const ff   = document.getElementById('fontFamily').value;
+  const fs   = document.getElementById('fontSize').value;
+  const lh   = document.getElementById('lineHeight').value;
+  paper.style.fontFamily  = ff;
+  paper.style.fontSize    = fs + 'px';
+  paper.style.lineHeight  = (lh / 10).toFixed(1);
+  document.getElementById('fontSizeVal').textContent   = fs + 'px';
+  document.getElementById('lineHeightVal').textContent = (lh / 10).toFixed(1);
+}
 
-        async function generate() {
-            const semester = document.getElementById("semester").value;
-            const subject = document.getElementById("subject").value;
-            const btn = document.getElementById("generateBtn");
-            const loader = document.getElementById("loader");
-            const errorDiv = document.getElementById("error");
-            const outputSec = document.getElementById("outputSection");
+/* ================================================================
+   VIEW TOGGLE
+================================================================ */
+function setView(v) {
+  state.view = v;
+  document.getElementById('viewRendered').classList.toggle('active', v === 'rendered');
+  document.getElementById('viewRaw').classList.toggle('active', v === 'raw');
 
-            errorDiv.style.display = "none";
-            outputSec.style.display = "none";
-            loader.classList.add("active");
-            btn.disabled = true;
+  const rendered = document.getElementById('renderedView');
+  const raw      = document.getElementById('rawView');
+  const hint     = document.getElementById('hintBar');
 
-            try {
-                const res = await fetch(`${API_URL}/generate`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ semester, subject })
-                });
+  if (v === 'rendered') {
+    rendered.style.display = 'flex';
+    raw.classList.remove('show');
+    hint.style.display = 'flex';
+    // sync raw → rendered if user edited
+    const newRaw = document.getElementById('rawTextarea').value;
+    if (newRaw !== state.raw) {
+      state.raw = newRaw;
+      renderPaper();
+    }
+  } else {
+    rendered.style.display = 'none';
+    raw.classList.add('show');
+    hint.style.display = 'none';
+    document.getElementById('rawTextarea').value = state.raw;
+  }
+}
 
-                const data = await res.json();
-                if (!res.ok || data.error) throw new Error(data.error || "Unknown error from server.");
+function onRawEdit() {
+  // live sync raw textarea back to state
+  state.raw = document.getElementById('rawTextarea').value;
+}
 
-                document.getElementById("output").value = data.question_paper;
-                outputSec.style.display = "block";
+/* ================================================================
+   GENERATE (full paper)
+================================================================ */
+async function generate() {
+  const semester = document.getElementById("semester").value;
+  const subject  = document.getElementById("subject").value;
 
-            } catch (err) {
-                errorDiv.textContent = `Error: ${err.message}`;
-                errorDiv.style.display = "block";
-            } finally {
-                loader.classList.remove("active");
-                btn.disabled = false;
-            }
-        }
+  state.subject  = subject;
+  state.semester = semester;
 
-        function downloadPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF({ unit: "mm", format: "a4" });
-            const text = document.getElementById("output").value;
-            const subjectVal = document.getElementById("subject").value;
-            const qpCode = document.getElementById("qpCode").value.trim();
-            const examTitle = document.getElementById("examTitle").value.trim()
-                || "First Semester B.Tech Degree Examination";
+  setLoading(true);
+  hideError();
 
-            const info = SUBJECT_MAP[subjectVal];
-            const subjectLabel = info ? info.label : subjectVal.toUpperCase();
-            const courseCode = info ? info.code : "";
+  try {
+    const res  = await fetch(`${API_URL}/generate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ semester, subject })
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || "Unknown server error.");
 
-            const margin = 15;
-            const pageW = doc.internal.pageSize.getWidth();
-            const pageH = doc.internal.pageSize.getHeight();
-            const maxWidth = pageW - margin * 2;
+    state.raw     = data.question_paper;
+    state.isLatex = !!data.latex;
+    showOutput();
+    renderPaper();
 
-            let y = 12;
+  } catch (err) {
+    showError(err.message);
+    setLoading(false);
+    showEmptyIfNeeded();
+  }
+}
 
-            // QP Code bold centered at very top (like real KTU paper)
-            if (qpCode) {
-                doc.setFontSize(11);
-                doc.setFont("helvetica", "bold");
-                doc.text(qpCode, pageW / 2, y, { align: "center" });
-                y += 7;
-            }
+/* ================================================================
+   REGENERATE FULL PAPER
+================================================================ */
+async function regenerateFull() {
+  setStatusGenerating();
+  const regenBtn = document.getElementById('regenBtn');
+  regenBtn.disabled = true;
 
-            // Reg No and Name
-            doc.setFontSize(10);
-            doc.setFont("helvetica", "normal");
-            doc.text("Reg No.: ___________________", margin, y);
-            doc.text("Name: ___________________", pageW - margin, y, { align: "right" });
-            y += 7;
+  try {
+    const res  = await fetch(`${API_URL}/generate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ semester: state.semester, subject: state.subject })
+    });
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || "Unknown server error.");
 
-            // University name
-            doc.setFontSize(12);
-            doc.setFont("helvetica", "bold");
-            doc.text("APJ ABDUL KALAM TECHNOLOGICAL UNIVERSITY", pageW / 2, y, { align: "center" });
-            y += 6;
+    state.raw     = data.question_paper;
+    state.isLatex = !!data.latex;
+    renderPaper();
+    if (state.view === 'raw') document.getElementById('rawTextarea').value = state.raw;
+    setStatusDone();
 
-            // Exam title
-            doc.setFontSize(10);
-            doc.setFont("helvetica", "normal");
-            doc.text(examTitle, pageW / 2, y, { align: "center" });
-            y += 12; // extra space before course code
+  } catch (err) {
+    showError(err.message);
+    setStatusDone();
+  } finally {
+    regenBtn.disabled = false;
+  }
+}
 
-            // Course Code and Course Name
-            doc.setFont("helvetica", "bold");
-            doc.text(`Course Code: ${courseCode}`, pageW / 2, y, { align: "center" });
-            y += 5;
+/* ================================================================
+   REGENERATE SINGLE QUESTION
+================================================================ */
+async function regenQuestion(qIndex) {
+  const q = state.questions[qIndex];
+  if (!q) return;
 
-            const nameLines = doc.splitTextToSize(`Course Name: ${subjectLabel}`, maxWidth);
-            nameLines.forEach(line => { doc.text(line, pageW / 2, y, { align: "center" }); y += 5; });
-            y += 4;
+  // find the question row in DOM and show spinner
+  const row = document.querySelector(`[data-qidx="${qIndex}"]`);
+  const regenBtn = row ? row.querySelector('.btn-regen-q') : null;
+  if (regenBtn) {
+    regenBtn.innerHTML = `<span class="q-regen-spinner"></span>`;
+    regenBtn.disabled  = true;
+  }
 
-            // Max marks and duration
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(10);
-            doc.text("Max. Marks: 60", margin, y);
-            doc.text("Duration: 2 Hours 30 Minutes", pageW - margin, y, { align: "right" });
-            y += 8;
+  try {
+    const prompt = buildRegenPrompt(q);
+    const res = await fetch(`${API_URL}/generate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        semester: state.semester,
+        subject:  state.subject,
+        regen_single: true,
+        question_context: prompt
+      })
+    });
 
-            // Body — center PART A / PART B / Module headings, normal for rest
-            doc.setFontSize(10);
+    // Fallback: if backend doesn't support regen_single yet,
+    // we embed the regeneration prompt into a full generate call
+    // and extract the matching question number from the result.
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || "Server error");
 
-            // Pre-process: join continuation lines into single lines
-            const rawLines = text.split("\n");
-            const joinedLines = [];
-            for (let i = 0; i < rawLines.length; i++) {
-                const line = rawLines[i];
-                const trimmed = line.trim();
-                // A new logical line starts with: question number, a) b), Module, PART, OR, or is empty
-                const isNewLine = !trimmed ||
-                    /^\d+\./.test(trimmed) ||
-                    /^[a-b]\)/.test(trimmed) ||
-                    /^(PART [AB]|SECTION [AB]|Module\s*[-–]?\s*\d+|OR)$/i.test(trimmed) ||
-                    /^\(Answer/i.test(trimmed);
-                if (isNewLine || joinedLines.length === 0) {
-                    joinedLines.push(line);
-                } else {
-                    // Continuation — append to previous line with a space
-                    joinedLines[joinedLines.length - 1] = joinedLines[joinedLines.length - 1].trimEnd() + " " + trimmed;
-                }
-            }
-            const lines = joinedLines;
-            lines.forEach(line => {
-                if (y > pageH - margin) { doc.addPage(); y = margin; }
-                const trimmed = line.trim();
-                const isHeading = /^(PART [AB]|SECTION [AB]|Module\s*[-–]?\s*\d+)$/i.test(trimmed);
-                const isSubHeading = /^\(Answer/i.test(trimmed);
-                const isOR = /^OR$/i.test(trimmed);
-                if (isHeading) {
-                    doc.setFont("helvetica", "bold");
-                    doc.text(trimmed, pageW / 2, y, { align: "center" });
-                } else if (isSubHeading) {
-                    doc.setFont("helvetica", "italic");
-                    doc.text(trimmed, pageW / 2, y, { align: "center" });
-                } else if (isOR) {
-                    doc.setFont("helvetica", "bold");
-                    doc.text("OR", pageW / 2, y, { align: "center" });
-                } else {
-                    doc.setFont("courier", "normal");
-                    // Check if line ends with marks like (3) or (5) etc
-                    const marksMatch = line.match(/^(.*?)\s*(\(\d+\))\s*$/);
-                    if (marksMatch) {
-                        const questionText = marksMatch[1].trimEnd();
-                        const marks = marksMatch[2];
-                        const textWidth = maxWidth - 15;
-                        const textLines = doc.splitTextToSize(questionText, textWidth);
-                        // Print first line with marks on the right
-                        if (y > pageH - margin) { doc.addPage(); y = margin; }
-                        doc.text(textLines[0], margin, y);
-                        doc.text(marks, pageW - margin, y, { align: "right" });
-                        y += 5.5;
-                        // Print remaining lines normally indented
-                        for (let i = 1; i < textLines.length; i++) {
-                            if (y > pageH - margin) { doc.addPage(); y = margin; }
-                            doc.text(textLines[i], margin, y);
-                            y += 5.5;
-                        }
-                        return;
-                    }
-                    // Normal line — wrap within full width
-                    const wrappedLines = doc.splitTextToSize(line, maxWidth);
-                    wrappedLines.forEach(wline => {
-                        if (y > pageH - margin) { doc.addPage(); y = margin; }
-                        doc.text(wline, margin, y);
-                        y += 5.5;
-                    });
-                    return;
-                }
-                y += 5.5;
-            });
+    const newPaper = data.question_paper;
+    const newQ     = extractQuestionFromPaper(newPaper, q.number);
 
-            const filename = `${subjectVal.replace(/\s+/g, "_")}_QP.pdf`;
-            doc.save(filename);
-        }
-    </script>
+    if (newQ) {
+      // Patch the raw text with new question
+      state.raw = replaceQuestionInRaw(state.raw, q.number, newQ);
+      renderPaper();
+      if (state.view === 'raw') document.getElementById('rawTextarea').value = state.raw;
+    }
 
+  } catch (err) {
+    // If single-regen not supported by backend, gracefully degrade:
+    // generate a full new paper and extract the question
+    try {
+      const res2 = await fetch(`${API_URL}/generate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ semester: state.semester, subject: state.subject })
+      });
+      const data2 = await res2.json();
+      if (!res2.ok || data2.error) throw new Error(data2.error || "Server error");
+
+      const newQ = extractQuestionFromPaper(data2.question_paper, q.number);
+      if (newQ) {
+        state.raw = replaceQuestionInRaw(state.raw, q.number, newQ);
+        renderPaper();
+        if (state.view === 'raw') document.getElementById('rawTextarea').value = state.raw;
+      }
+    } catch (err2) {
+      showError(`Could not regenerate Q${q.number}: ${err2.message}`);
+    }
+  }
+
+  if (regenBtn) {
+    regenBtn.innerHTML = '↻ Regen';
+    regenBtn.disabled  = false;
+  }
+}
+
+function buildRegenPrompt(q) {
+  return `Regenerate only question ${q.number} (${q.marks} marks) for module ${q.module}. Keep the same format and difficulty.`;
+}
+
+/* Extract a specific question block (number N) from a full paper string */
+function extractQuestionFromPaper(paper, num) {
+  const lines    = paper.split('\n');
+  const startPat = new RegExp(`^\\s*${num}[.)\\s]`);
+  let   collecting = false;
+  let   result     = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (startPat.test(line)) {
+      collecting = true;
+      result.push(line);
+      continue;
+    }
+    if (collecting) {
+      const nextQPat = /^\s*\d+[.)]\s/;
+      const isBreak  = /^(PART|Module\s*\d|OR\s*$)/i.test(line.trim());
+      if ((nextQPat.test(line) && !/^\s*[ab][.)]/i.test(line)) || isBreak) break;
+      result.push(line);
+    }
+  }
+  return result.length ? result.join('\n') : null;
+}
+
+/* Replace a question block in the raw text */
+function replaceQuestionInRaw(raw, num, newBlock) {
+  const lines    = raw.split('\n');
+  const startPat = new RegExp(`^\\s*${num}[.)\\s]`);
+  let   start = -1, end = -1;
+
+  for (let i = 0; i < lines.length; i++) {
+    if (startPat.test(lines[i])) { start = i; continue; }
+    if (start !== -1 && end === -1) {
+      const nextQPat = /^\s*\d+[.)]\s/;
+      const isBreak  = /^(PART|Module\s*\d|OR\s*$)/i.test(lines[i].trim());
+      if ((nextQPat.test(lines[i]) && !/^\s*[ab][.)]/i.test(lines[i])) || isBreak) {
+        end = i; break;
+      }
+    }
+  }
+  if (start === -1) return raw;
+  if (end   === -1) end = lines.length;
+
+  const before = lines.slice(0, start);
+  const after  = lines.slice(end);
+  return [...before, ...newBlock.split('\n'), ...after].join('\n');
+}
+
+/* ================================================================
+   PAPER PARSER
+================================================================ */
+function parsePaper(rawText) {
+  /*
+   Returns { header, partA, partB, questions }
+   questions: [{ index, number, module, marks, text, subparts, isOr }]
+  */
+  const lines = rawText.split('\n').map(l => l.trimEnd());
+  const questions = [];
+  let   qIdx = 0;
+  let   currentMod = 0;
+
+  const isPart       = l => /^PART\s+[AB]/i.test(l.trim());
+  const isInstruct   = l => /^\(Answer/i.test(l.trim());
+  const isModule     = l => /^Module\s*\d/i.test(l.trim());
+  const isOR         = l => /^OR\s*$/i.test(l.trim());
+  const isQNum       = l => /^\s*\d+[.)]\s/.test(l) && !/^\s*[ab][.)]/i.test(l);
+  const isSubpart    = l => /^\s*[ab][.)]\s/i.test(l);
+  const getQNum      = l => parseInt(l.match(/^\s*(\d+)/)[1]);
+  const getMarks     = l => { const m = l.match(/\((\d+)\)\s*$/); return m ? parseInt(m[1]) : null; };
+  const stripMarks   = l => l.replace(/\(\d+\)\s*$/, '').trim();
+
+  // Collect blocks
+  let   pendingLines = [];
+  let   pendingNum   = null;
+  let   pendingSubs  = [];
+  let   pendingIsOr  = false;
+
+  function flushPending() {
+    if (pendingNum === null) return;
+    const allText = pendingLines.join(' ');
+    const marks   = getMarks(pendingLines[pendingLines.length - 1]) || getMarks(allText);
+    questions.push({
+      index:    qIdx++,
+      number:   pendingNum,
+      module:   currentMod,
+      marks:    marks,
+      text:     stripMarks(allText),
+      subparts: pendingSubs.map(s => ({
+        label: s.label,
+        text:  stripMarks(s.lines.join(' ')),
+        marks: getMarks(s.lines[s.lines.length - 1])
+      })),
+      isOr: pendingIsOr,
+    });
+    pendingLines = [];
+    pendingNum   = null;
+    pendingSubs  = [];
+    pendingIsOr  = false;
+  }
+
+  let inSubpart     = false;
+  let subpartBuf    = null;
+  let nextIsOr      = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trim = line.trim();
+    if (!trim) continue;
+    if (isPart(line) || isInstruct(line)) { flushPending(); continue; }
+    if (isModule(line)) {
+      flushPending();
+      const m = trim.match(/\d+/);
+      if (m) currentMod = parseInt(m[0]);
+      continue;
+    }
+    if (isOR(line))  { nextIsOr = true; continue; }
+
+    if (isQNum(line)) {
+      flushPending();
+      inSubpart  = false;
+      subpartBuf = null;
+      pendingNum = getQNum(line);
+      pendingIsOr = nextIsOr;
+      nextIsOr   = false;
+      pendingLines.push(line);
+      continue;
+    }
+
+    if (isSubpart(line) && pendingNum !== null) {
+      if (subpartBuf) pendingSubs.push(subpartBuf);
+      const labelMatch = line.match(/^\s*([ab])[.)]\s*/i);
+      subpartBuf = { label: labelMatch ? labelMatch[1].toLowerCase() + ')' : '', lines: [line] };
+      inSubpart  = true;
+      continue;
+    }
+
+    if (inSubpart && subpartBuf) {
+      subpartBuf.lines.push(line);
+    } else if (pendingNum !== null) {
+      pendingLines.push(line);
+    }
+  }
+  if (subpartBuf) pendingSubs.push(subpartBuf);
+  flushPending();
+
+  state.questions = questions;
+  return questions;
+}
+
+/* ================================================================
+   RENDER PAPER
+================================================================ */
+function renderPaper() {
+  const paper   = document.getElementById('qpPaper');
+  const subject = state.subject;
+  const info    = SUBJECT_MAP[subject] || {};
+  const qpCode  = document.getElementById('qpCode').value.trim();
+  const examT   = document.getElementById('examTitle').value.trim() || "First Semester B.Tech Degree Examination";
+
+  // parse
+  const questions = parsePaper(state.raw);
+
+  // separate part A (Q1-8) and part B (Q9-16)
+  const partA = questions.filter(q => q.number >= 1  && q.number <= 8);
+  const partB = questions.filter(q => q.number >= 9  && q.number <= 16);
+
+  let html = '';
+
+  // ---- header ----
+  html += `<div class="qp-header">`;
+  if (qpCode) html += `<div class="qp-qpcode">${esc(qpCode)}</div>`;
+  html += `
+    <div class="qp-reg-row">
+      <span>Reg No.: _________________________</span>
+      <span>Name: _________________________</span>
+    </div>
+    <div class="qp-univ">APJ Abdul Kalam Technological University</div>
+    <div class="qp-exam-title">${esc(examT)}</div>
+    <div class="qp-course-code">Course Code: ${esc(info.code || '')}</div>
+    <div class="qp-course-name">${esc(info.label || subject.toUpperCase())}</div>
+    <div class="qp-meta-row">
+      <span>Max. Marks: 60</span>
+      <span>Duration: 2 Hours 30 Minutes</span>
+    </div>
+  </div>`;
+
+  // ---- Part A ----
+  html += `<div class="part-heading">PART A</div>`;
+  html += `<div class="part-instruction">(Answer all questions. Each question carries 3 marks)</div>`;
+  partA.forEach(q => { html += renderQuestion(q); });
+
+  // ---- Part B ----
+  html += `<div class="part-heading">PART B</div>`;
+  html += `<div class="part-instruction">(Answer any one full question from each module. Each question carries 9 marks)</div>`;
+
+  // Group part B by module pairs
+  const mods = [1, 2, 3, 4];
+  const modMap = { 1:[9,10], 2:[11,12], 3:[13,14], 4:[15,16] };
+  mods.forEach(mod => {
+    const nums = modMap[mod];
+    const qs   = partB.filter(q => nums.includes(q.number));
+    if (!qs.length) return;
+    html += `<div class="module-heading">Module ${mod}</div>`;
+    qs.forEach((q, i) => {
+      if (q.isOr) html += `<div class="or-divider">OR</div>`;
+      html += renderQuestion(q);
+    });
+  });
+
+  paper.innerHTML = html;
+  applyTypography();
+
+  // Re-run MathJax if LaTeX
+  if (state.isLatex && window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise([paper]).catch(console.warn);
+  }
+}
+
+function renderQuestion(q) {
+  const regenBtn = `<button class="btn btn-regen-q" title="Regenerate this question" onclick="regenQuestion(${q.index})">↻ Regen</button>`;
+
+  if (q.subparts && q.subparts.length > 0) {
+    // has subparts
+    let sub = '';
+    q.subparts.forEach(s => {
+      sub += `
+        <div class="subpart-row" data-qidx="${q.index}">
+          <span class="sub-label">${esc(s.label)}</span>
+          <span class="q-body">${renderText(s.text)}</span>
+          <span class="q-marks">(${s.marks || ''})</span>
+          <button class="btn btn-regen-q" title="Regenerate this subpart" onclick="regenQuestion(${q.index})">↻ Regen</button>
+        </div>`;
+    });
+    return `
+      <div class="question-row" data-qidx="${q.index}">
+        <span class="q-number">${q.number}.</span>
+        <span class="q-body" style="flex:1"></span>
+        ${regenBtn}
+      </div>
+      ${sub}`;
+  }
+
+  return `
+    <div class="question-row" data-qidx="${q.index}">
+      <span class="q-number">${q.number}.</span>
+      <span class="q-body">${renderText(q.text)}</span>
+      <span class="q-marks">(${q.marks || ''})</span>
+      ${regenBtn}
+    </div>`;
+}
+
+function renderText(text) {
+  // Escape HTML but preserve LaTeX delimiters
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+/* ================================================================
+   UI STATE HELPERS
+================================================================ */
+function setLoading(on) {
+  document.getElementById('emptyState').style.display   = on ? 'none' : 'flex';
+  document.getElementById('loaderOverlay').classList.toggle('active', on);
+  document.getElementById('outputSection').classList.remove('show');
+  document.getElementById('generateBtn').disabled = on;
+}
+
+function showEmptyIfNeeded() {
+  if (!state.raw) {
+    document.getElementById('emptyState').style.display = 'flex';
+  }
+}
+
+function showOutput() {
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('loaderOverlay').classList.remove('active');
+  document.getElementById('outputSection').classList.add('show');
+  document.getElementById('generateBtn').disabled = false;
+
+  // show action buttons
+  document.getElementById('regenBtn').style.display   = 'flex';
+  document.getElementById('downloadBtn').style.display = 'flex';
+
+  // toolbar meta
+  const info = SUBJECT_MAP[state.subject] || {};
+  document.getElementById('toolbarTitle').textContent = info.label ? shortLabel(info.label) : state.subject;
+  document.getElementById('toolbarMeta').textContent  = info.code  || '';
+  setStatusDone();
+}
+
+function shortLabel(label) {
+  return label.length > 38 ? label.slice(0, 36) + '…' : label;
+}
+
+function setStatusGenerating() {
+  const pill = document.getElementById('statusPill');
+  pill.className = 'status-pill generating';
+  pill.innerHTML = '<span class="q-regen-spinner"></span> Regenerating…';
+}
+
+function setStatusDone() {
+  const pill = document.getElementById('statusPill');
+  pill.className = 'status-pill done';
+  pill.textContent = '✓ Ready';
+}
+
+function showError(msg) {
+  const el = document.getElementById('errorBar');
+  el.textContent = '⚠ ' + msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 7000);
+}
+
+function hideError() {
+  document.getElementById('errorBar').classList.remove('show');
+}
+
+/* ================================================================
+   PDF DOWNLOAD
+================================================================ */
+function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc    = new jsPDF({ unit: "mm", format: "a4" });
+  const text   = state.raw;
+  const subjectVal = state.subject;
+  const qpCode    = document.getElementById("qpCode").value.trim();
+  const examTitle = document.getElementById("examTitle").value.trim() || "First Semester B.Tech Degree Examination";
+  const info      = SUBJECT_MAP[subjectVal] || {};
+  const subLabel  = info.label || subjectVal.toUpperCase();
+  const courseCode= info.code  || "";
+
+  const margin = 15;
+  const pageW  = doc.internal.pageSize.getWidth();
+  const pageH  = doc.internal.pageSize.getHeight();
+  const maxW   = pageW - margin * 2;
+  let y = 12;
+
+  const addPage = () => { doc.addPage(); y = margin; };
+  const checkY  = (h=6) => { if (y + h > pageH - margin) addPage(); };
+
+  // QP Code
+  if (qpCode) {
+    doc.setFontSize(10); doc.setFont("helvetica","bold");
+    doc.text(qpCode, pageW/2, y, { align:"center" }); y += 6;
+  }
+
+  // Reg/Name
+  doc.setFontSize(9); doc.setFont("helvetica","normal");
+  doc.text("Reg No.: ___________________", margin, y);
+  doc.text("Name: ___________________", pageW-margin, y, { align:"right" }); y += 6;
+
+  // University
+  doc.setFontSize(11); doc.setFont("helvetica","bold");
+  doc.text("APJ ABDUL KALAM TECHNOLOGICAL UNIVERSITY", pageW/2, y, { align:"center" }); y += 5.5;
+
+  // Exam title
+  doc.setFontSize(9); doc.setFont("helvetica","normal");
+  doc.text(examTitle, pageW/2, y, { align:"center" }); y += 10;
+
+  // Course code + name
+  doc.setFont("helvetica","bold"); doc.setFontSize(9);
+  doc.text(`Course Code: ${courseCode}`, pageW/2, y, { align:"center" }); y += 5;
+  const nameLines = doc.splitTextToSize(`Course Name: ${subLabel}`, maxW);
+  nameLines.forEach(l => { doc.text(l, pageW/2, y, { align:"center" }); y += 4.5; });
+  y += 3;
+
+  // Max marks / duration
+  doc.setFont("helvetica","normal"); doc.setFontSize(9);
+  doc.text("Max. Marks: 60", margin, y);
+  doc.text("Duration: 2 Hours 30 Minutes", pageW-margin, y, { align:"right" }); y += 8;
+
+  // Body
+  doc.setFontSize(10);
+  const rawLines   = text.split("\n");
+  const joined     = [];
+  for (let i = 0; i < rawLines.length; i++) {
+    const l = rawLines[i], t = l.trim();
+    const isNew = !t ||
+      /^\d+[.)]\s/.test(t) ||
+      /^[ab][.)]\s/i.test(t) ||
+      /^(PART [AB]|Module\s*\d+|OR)$/i.test(t) ||
+      /^\(Answer/i.test(t);
+    if (isNew || !joined.length) joined.push(l);
+    else joined[joined.length-1] = joined[joined.length-1].trimEnd() + " " + t;
+  }
+
+  joined.forEach(line => {
+    const t = line.trim();
+    if (!t) { y += 2; return; }
+
+    checkY(6);
+
+    if (/^(PART [AB])$/i.test(t)) {
+      doc.setFont("helvetica","bold"); doc.setFontSize(10);
+      doc.text(t, pageW/2, y, { align:"center" }); y += 5.5; return;
+    }
+    if (/^\(Answer/i.test(t)) {
+      doc.setFont("helvetica","italic"); doc.setFontSize(9);
+      doc.text(t, pageW/2, y, { align:"center" }); y += 5; return;
+    }
+    if (/^Module\s*\d+$/i.test(t)) {
+      doc.setFont("helvetica","bolditalic"); doc.setFontSize(10);
+      doc.text(t, margin, y); y += 5.5; return;
+    }
+    if (/^OR$/i.test(t)) {
+      doc.setFont("helvetica","bold"); doc.setFontSize(9);
+      doc.text("OR", pageW/2, y, { align:"center" }); y += 5; return;
+    }
+
+    // question / subpart line
+    doc.setFont("helvetica","normal"); doc.setFontSize(10);
+    const marksM = line.match(/^(.*?)\s*(\(\d+\))\s*$/);
+    if (marksM) {
+      const txt   = marksM[1].trimEnd();
+      const marks = marksM[2];
+      const wrapped = doc.splitTextToSize(txt, maxW - 12);
+      checkY(5.5 * wrapped.length);
+      doc.text(wrapped[0], margin, y);
+      doc.text(marks, pageW-margin, y, { align:"right" });
+      y += 5.5;
+      for (let i = 1; i < wrapped.length; i++) {
+        checkY(5.5); doc.text(wrapped[i], margin + 4, y); y += 5.5;
+      }
+      return;
+    }
+    const wrapped = doc.splitTextToSize(line, maxW);
+    checkY(5.5 * wrapped.length);
+    wrapped.forEach(wl => { doc.text(wl, margin, y); y += 5.5; });
+  });
+
+  doc.save(`${subjectVal.replace(/\s+/g,"_")}_QP.pdf`);
+}
+
+/* ================================================================
+   INIT
+================================================================ */
+window.addEventListener("DOMContentLoaded", () => {
+  onSubjectChange();
+  // init slider displays
+  document.getElementById('fontSizeVal').textContent   = document.getElementById('fontSize').value + 'px';
+  document.getElementById('lineHeightVal').textContent = (document.getElementById('lineHeight').value / 10).toFixed(1);
+});
+</script>
 </body>
-
 </html>
