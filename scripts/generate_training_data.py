@@ -42,6 +42,8 @@ SUBJECTS = [
     ("Programming in C", "1 & 2", "UCEST108_prog_c.txt"),
     ("Foundations of Computing", "1 & 2", "UCEST109_foundations.txt"),
     ("Engineering Entrepreneurship and IPR", "1 & 2", "UCEST110_entrepreneur.txt"),
+    ("Data Structures and Algorithms", "1 & 2","PCCST303_data_structures.txt"),
+    ("Object Oriented Programming", "1 & 2","PBCST304_oop_java.txt")
 ]
 
 # -----------------------------------------------

@@ -35,6 +35,8 @@ SUBJECT_MAP = {
     "prog_c": "Programming in C",
     "foundations": "Foundations of Computing",
     "entrepreneur": "Engineering Entrepreneurship and IPR",
+    "data_structures": "Data Structures and Algorithms",
+    "oop_java": "Object Oriented Programming"
 }
 
 # Maps subject names → keyword used in their syllabus filename
@@ -46,6 +48,8 @@ SUBJECT_KEYWORD_MAP: dict[str, str] = {
     "Programming in C": "prog_c",
     "Foundations of Computing": "foundations",
     "Engineering Entrepreneurship and IPR": "entrepreneur",
+    "Data Structures and Algorithms": "data_structures",
+    "Object Oriented Programming": "oop_java"
 }
 
 # -----------------------------------------------
