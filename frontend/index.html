@@ -229,19 +229,13 @@
             <div class="form-group">
                 <label for="subject">Subject</label>
                 <select id="subject" onchange="onSubjectChange()">
-                    <option value="Mathematics 1">Mathematics for Information Science – 1</option>
                     <option value="Python">Algorithmic Thinking with Python</option>
                     <option value="Electrical and Electronics">Intro to Electrical &amp; Electronics Engg</option>
-                    <option value="Engineering Graphics">Engineering Graphics and CAD</option>
                     <option value="Chemistry">Chemistry for Information Science</option>
                     <option value="Physics">Physics for Information Science</option>
-                    <option value="Mathematics 2">Mathematics for Information Science – 2</option>
                     <option value="Programming in C">Programming in C</option>
                     <option value="Foundations of Computing">Foundations of Computing</option>
                     <option value="Engineering Entrepreneurship and IPR">Engineering Entrepreneurship and IPR</option>
-                    <option value="Discrete Mathematics">Discrete Mathematics</option>
-                    <option value="LSPC">Life Skills and Professional Communication</option>
-                    <option value="Health and Wellness">Health and Wellness</option>
                 </select>
             </div>
 
@@ -262,7 +256,7 @@
 
         <div class="loader" id="loader">
             <div class="spinner"></div>
-            Generating question paper, please wait... (takes 6-8 minutes due to API rate limits)
+            Generating question paper, please wait... 
         </div>
 
         <div id="error"></div>
@@ -282,16 +276,13 @@
         const API_URL = "http://localhost:5000";
 
         const SUBJECT_MAP = {
-            "Mathematics 1": { code: "GAMAT101", label: "MATHEMATICS FOR INFORMATION SCIENCE – 1" },
             "Python": { code: "UCEST105", label: "ALGORITHMIC THINKING WITH PYTHON" },
             "Electrical and Electronics": { code: "GXEST104", label: "INTRODUCTION TO ELECTRICAL AND ELECTRONICS ENGINEERING" },
             "Chemistry": { code: "GXCY122", label: "CHEMISTRY FOR INFORMATION SCIENCE AND ELECTRICAL SCIENCE" },
             "Physics": { code: "GAPHT121", label: "PHYSICS FOR INFORMATION SCIENCE" },
-            "Mathematics 2": { code: "GAMAT201", label: "MATHEMATICS FOR INFORMATION SCIENCE – 2" },
             "Programming in C": { code: "GXEST204", label: "PROGRAMMING IN C" },
             "Foundations of Computing": { code: "GXEST203", label: "FOUNDATIONS OF COMPUTING: FROM HARDWARE ESSENTIALS TO WEB DESIGN" },
             "Engineering Entrepreneurship and IPR": { code: "UCEST206", label: "ENGINEERING ENTREPRENEURSHIP AND IPR" },
-            "Discrete Mathematics": { code: "PCCST205", label: "DISCRETE MATHEMATICS" },
         };
 
         function onSubjectChange() {
