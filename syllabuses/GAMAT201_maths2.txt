@@ -1,0 +1,58 @@
+COURSE CODE: GAMAT201
+SUBJECT: Mathematics for Information Science 2
+============================================================
+
+MODULE 1: Linear Systems, Eigenvalues & Matrix Diagonalization
+--------------------------------------------------
+- Linear systems of equations
+- Solution by Gauss elimination
+- Row echelon form and rank of a matrix
+- Fundamental theorem for linear systems:
+- Homogeneous systems (without proof)
+- Non-homogeneous systems (without proof)
+- Eigenvalues and Eigenvectors of matrices
+- Diagonalization of matrices
+
+MODULE 2: Vector Spaces & Subspaces
+--------------------------------------------------
+- Vector Spaces
+- Examples of vector space: R^n and M_mxn only
+- Subspaces
+- Examples as subspaces of R^n and M_mxn
+- Linear combinations of vectors in a vector space
+- Spanning sets
+- Linear dependence and independence
+- Basis for a vector space
+- The dimension of a vector space
+- Coordinate representation in R^n
+- Change of basis in R^n: Transition Matrix (without proof)
+
+MODULE 3: Inner Product Spaces & Orthogonalization 
+--------------------------------------------------
+- Vector length and unit vector
+- Dot product and angle between two vectors
+- The Cauchy-Schwarz Inequality
+- Inner product
+- Examples as R^n and M_2x2
+- Properties of inner products
+- Definitions of length, distance and angle
+- Orthogonal projections in inner product spaces
+- Orthogonal and orthonormal sets
+- Orthogonal and orthonormal basis
+- Gram-Schmidt orthonormalization process (without proof)
+- The least squares problem
+- Projection onto a subspace
+- Solving the least squares problems
+
+MODULE 4: Linear Transformations
+--------------------------------------------------
+- Linear Transformations
+- Properties of linear transformations
+- Linear Transformation given by a matrix
+- Rotation in R^2
+- Projection in R^3
+- Kernel of a Linear Transformation and its basis
+- Range of a Linear Transformation and its basis
+- Rank and Nullity of a Linear Transformation
+- Sum of Rank and Nullity (without proof)
+- Matrices for Linear Transformations

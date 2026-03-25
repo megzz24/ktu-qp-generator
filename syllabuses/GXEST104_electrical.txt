@@ -1,0 +1,65 @@
+COURSE CODE: GXEST104
+SUBJECT: Introduction to Electrical & Electronics Engineering
+============================================================
+
+MODULE 1: Elementary Concepts of DC Electric Circuits and Magnetic Circuits
+--------------------------------------------------
+- Current and Voltage Division Rule
+- Relative potential
+- Capacitors & Inductors: V-I relations and Energy stored
+- Ohm's Law and Kirchhoff's laws (numerical problems)
+- Star-delta conversion (resistive networks only, derivation not required, numerical problems)
+- Analysis of DC Electric circuits: Mesh current method, matrix representation, solution of network equations
+- Node voltage method: matrix representation, solution of network equations by matrix methods (numerical problems)
+- Magnetic Circuits: Basic Terminology: MMF, field strength, flux density, reluctance
+- Comparison between electric and magnetic circuits
+- Series and parallel magnetic circuits with composite materials
+ 
+MODULE 2: Electromagnetic Induction and AC Circuits
+--------------------------------------------------
+
+- Faraday's laws, Lenz's law
+- Statically induced and dynamically induced emf
+- Self-inductance and mutual inductance, coefficient of coupling
+- Generation of alternating voltages
+- Representation of sinusoidal waveforms: frequency, period, average value, RMS value and form factor (numerical problems)
+- Phasor representation of sinusoidal quantities: Trigonometric, Rectangular, Polar and complex forms
+- Analysis of simple AC circuits: Purely resistive, inductive & capacitive circuits
+- Inductive and capacitive reactance, concept of impedance (numerical problems)
+- RL, RC and RLC series circuits: power factor, active, reactive and apparent power (numerical problems)
+- Three phase AC systems: Generation of three phase voltages
+- Advantages of three phase systems
+- Star and delta connections (balanced only)
+- Relation between line and phase voltages, line and phase currents (numerical problems)
+
+MODULE 3: Introduction to Electronic devices
+--------------------------------------------------
+- Passive and active components in electronics
+- Working of PN junction diode, V-I characteristics of PN junction diode
+- Zener diode and avalanche breakdown
+- Basics of Zener voltage regulator
+- Block diagram of DC power supply
+- Circuit and working of half wave, full wave and bridge rectifiers
+- Ripple factor (with and without capacitor filters)
+- Construction, working and V-I characteristics of BJT
+- Input output characteristics of CE configuration
+- Comparison of CE, CB and CC configurations
+- Concept of biasing and load line
+- Transistor as a switch
+- Transistor as an amplifier (Circuit Diagram and working)
+- RC coupled amplifier: Circuit diagram and frequency response
+- Introduction to FET
+- Construction and working of N-channel and P-channel MOSFETs
+
+MODULE 4: Modern Electronics and its Applications
+--------------------------------------------------
+- General block diagram of a Communication system
+- Block diagram of Fiber optic Communication system
+- Concept of AM and FM (no derivation required)
+- Block diagram of AM and FM super-heterodyne receiver
+- Basic concepts of Wired and Wireless communication
+- Block diagram of GSM
+- Comparison of 3G, 4G, 5G and 6G communication technologies
+- Block diagrams of Electronic instrumentation system, Digital Multimeter, Function generator
+- Introduction to CRO and Lissajous patterns
+- Applications of modern electronics: IoT based smart homes, healthcare and agriculture (Case study only)

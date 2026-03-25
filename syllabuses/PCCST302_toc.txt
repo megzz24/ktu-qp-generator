@@ -1,0 +1,89 @@
+COURSE CODE: PCCST302
+SUBJECT: Theory of Computation
+============================================================
+
+MODULE 1: Foundations: Finite Automata
+--------------------------------------------------
+- Motivation for studying computability
+- need for mathematical modeling automata
+- Introducing automata through simple models - On/Off switch, coffee vending machine
+- Three basic concepts: Alphabet, Strings, and Languages
+
+- Finite Automata 
+- Formal definition of a finite automaton
+- Deterministic Finite Automata (DFA)
+- Regular languages
+- Nondeterminism (guess and verify paradigm)
+- Formal definition of a nondeterministic finite automaton
+- NFA with epsilon transitions
+- Eliminating epsilon transitions (Proof not expected)
+- Equivalence of NFAs and DFAs (Proof not expected) 
+- The Subset Construction
+- DFA State Minimization
+- Applications of finite automata - text search, keyword recognition
+
+MODULE 2: Regular Expressions, Regular Languages, and Context-Free Grammars
+--------------------------------------------------
+- Regular Expressions 
+- The formal definition of a regular expression
+- Building Regular Expressions
+- Equivalence with finite automata (Proof not expected) 
+- Converting FA to Regular Expressions
+- Converting Regular Expressions to FA
+- Pattern Matching and Regular Expressions
+- Regular grammar
+- Equivalence with FA - Conversion in both directions
+
+- Properties of Regular Languages 
+- Closure and Decision Properties of Regular Languages (with proofs)
+- The Pumping Lemma for Regular Languages (with formal proof)
+- Pumping lemma as a tool to prove non regularity of languages
+
+- Context-Free Grammars and Applications 
+- Formal definition of a context-free grammar
+- Designing context-free grammars
+- Leftmost and Rightmost Derivations Using a Grammar
+- Parse Trees
+- Ambiguous Grammars
+- Resolving ambiguity
+- Inherent ambiguity,
+- CFGs and programming languages
+
+MODULE 3: Pushdown Automata and Context-Free Languages
+--------------------------------------------------
+- Pushdown Automata
+- Formal definition of a pushdown automaton
+- DPDA and NPDA
+- Examples of pushdown automata
+- Equivalence NPDAs and CFGs (Proof not expected) - conversions in both directions
+
+- Simplification of Context-Free Languages 
+- Elimination of useless symbols and productions
+- Eliminating epsilon productions
+- Eliminating Greibach normal form
+
+- Properties of Context-Free Languages 
+- The Pumping Lemma for Context-Free Languages (with formal proof)
+- Closure and Decision Properties of Context-Free Languages (with formal proofs)
+
+
+MODULE 4: Turing Machines and Computability
+--------------------------------------------------
+- Turing Machines 
+- The formal definition of a Turing machine
+- Examples of Turing machines 
+- Turing machines as language acceptors
+- Turing machines as computers of functions
+- Variants of Turing Machines (Proofs for equivalence with basic model not expected)
+- Recursive and recursively enumerable languages
+- Chomskian hierarchy
+- Linear bounded automaton as a restricted TM.
+
+- Computability 
+- Church Turing thesis
+- Encoding of TMs
+- Universal Machine and Diagonalization
+- Reductions
+- Decidable and Undecidable Problems
+- Halting Problem
+- Post Correspondence Problem and the proofs for their undecidability.

@@ -1,0 +1,65 @@
+COURSE CODE: GXCYT122
+SUBJECT: Chemistry for Information Science
+============================================================
+
+MODULE 1: Electrochemistry and Corrosion Science
+--------------------------------------------------
+- Electrochemical Cell
+- Electrode potential
+- Nernst equation for single electrode and cell (Numerical problems)
+- Reference electrodes: SHE & Calomel electrode - Construction and Working
+- Electrochemical series - Applications
+- Glass Electrode & pH Measurement
+- Conductivity Measurement using Digital conductivity meter
+- Li-ion battery: construction and working
+- H2-O2 fuel cell (acid electrolyte only): construction and working
+- Corrosion: Electrochemical corrosion mechanism (acidic & alkaline medium)
+- Galvanic series
+- Corrosion control methods
+- Cathodic Protection: Sacrificial anodic protection and impressed current cathodic protection
+- Electroplating of copper
+- Electroless plating of copper
+
+MODULE 2: Materials for Electronic Applications 
+--------------------------------------------------
+- Nanomaterials: Classification based on Dimension & Materials
+- Synthesis of Nanomaterials: Sol gel & Chemical Reduction
+- Applications of nanomaterials
+- Carbon Nanotubes, Fullerenes, Graphene & Carbon Quantum Dots: structure, properties & application
+- Fire Retardant Polymers: Halogenated & Non-halogenated polymers (Examples only)
+- Conducting Polymers: Classification
+- Polyaniline & Polypyrrole: synthesis, properties and applications
+- Organic Light Emitting Diode (OLED): construction, working and applications
+- Dye-Sensitized Solar Cells (DSSC): construction, working and applications
+- Materials used in Quantum Computing Technology
+- Super capacitors
+- Spintronics
+
+MODULE 3: Molecular Spectroscopy and Analytical Techniques
+--------------------------------------------------
+- Spectroscopy: Types of spectra, Molecular energy levels
+- Beer Lambert's law (Numerical problems)
+- Electronic Spectroscopy: Principle, Types of electronic transitions
+- Role of conjugation in absorption maxima
+- Electronic Spectroscopy Instrumentation and Applications
+- Vibrational Spectroscopy: Principle, Number of vibrational modes
+- Vibrational modes of CO2 and H2O
+- Vibrational Spectroscopy Applications
+- Thermal Analysis: Dielectric Thermal Analysis (DETA) of Polymers - Working and Application
+- Electron Microscopic Techniques: SEM - Principle, instrumentation and Applications
+
+MODULE 4: Environmental Chemistry
+--------------------------------------------------
+- Water characteristics
+- Hardness: Types of hardness - Temporary and Permanent
+- Disadvantages of hard water
+- Degree of hardness (Numericals)
+- Water softening methods: Ion exchange process - Principle, procedure and advantages
+- Reverse osmosis: principle, process and advantages
+- Water disinfection methods: Chlorination, Break point chlorination, Ozone and UV irradiation
+- Dissolved oxygen (DO), BOD and COD: Definition & Significance
+- Sewage water treatment: Primary, Secondary and Tertiary - Flow diagram
+- Trickling filter and UASB process
+- E-Waste: Methods of disposal - recycle, recovery and reuse
+- Chemistry of climate change: Greenhouse Gases, Ozone Depletion
+- Sustainable Development: Introduction to Sustainable Development Goals

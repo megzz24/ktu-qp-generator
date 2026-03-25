@@ -1,0 +1,55 @@
+COURSE CODE: GAMAT301
+SUBJECT: Mathematics for Information Science 3
+============================================================
+
+MODULE 1: Discrete Random Variables & Probability Distributions
+--------------------------------------------------
+- Random variables
+- Discrete random variables and their probability distributions
+- Cumulative distribution function
+- Expectation, Mean and Variance
+- The Binomial probability distribution
+- The Poisson probability distribution
+- Poisson distribution as a limit of the Binomial distribution
+- Joint pmf of two discrete random variables
+- Marginal pmf
+- Independent random variables
+- Expected value of a function of two discrete variables
+
+MODULE 2: Continuous Random Variables & Joint Distributions
+--------------------------------------------------
+- Continuous random variables and their probability distributions
+- Cumulative distribution function
+- Expectation, Mean and Variance
+- Uniform distribution
+- Normal distribution
+- Exponential distribution
+- Joint pdf of two continuous random variables
+- Marginal pdf
+- Independent random variables
+- Expected value of a function of two continuous variables
+
+MODULE 3: Limit Theorems & Stochastic Processes
+--------------------------------------------------
+- Limit Theorems:
+- Markov's Inequality
+- Chebyshev's Inequality
+- Strong Law of Large Numbers (without proof)
+- Central Limit Theorem (without proof)
+- Stochastic Processes:
+- Discrete-time process
+- Continuous-time process
+- Counting Processes
+- The Poisson Process
+- Interarrival times (Theorems without proof)
+
+MODULE 4: Markov Chains
+--------------------------------------------------
+- Markov Chains
+- Random Walk Model
+- Chapman-Kolmogorov Equations
+- Classification of States
+- Irreducible Markov chain
+- Recurrent state
+- Transient state
+- Long-Run Proportions (Theorems without proof)

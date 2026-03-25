@@ -28,10 +28,10 @@ with open(META_PATH, "rb") as f:
 # -----------------------------------------------
 
 
-def retrieve_context(subject: str, top_k: int = 8) -> str:
+def retrieve_context(subject: str, top_k: int = 4) -> dict[int, str]:
     """
     Retrieve relevant chunks from the FAISS index for a given subject.
-    Returns balanced context across all 4 modules.
+    Returns context separated by module: { 1: "...", 2: "...", 3: "...", 4: "..." }
     """
     query = f"KTU {subject} important topics examination questions"
     query_vec = embedder.encode([query]).astype("float32")
@@ -52,17 +52,17 @@ def retrieve_context(subject: str, top_k: int = 8) -> str:
             if len(results_by_module[mod]) < 2:
                 results_by_module[mod].append(chunks[i])
         else:
-            if len(general_results) < 2:
+            if len(general_results) < 1:
                 general_results.append(chunks[i])
 
-    context_parts: list[str] = []
-    for mod in [1, 2, 3, 4]:
-        if results_by_module[mod]:
-            context_parts.append(f"--- Module {mod} content ---")
-            context_parts.extend(results_by_module[mod])
+    # Distribute general results into modules that have nothing
+    for chunk in general_results:
+        for mod in [1, 2, 3, 4]:
+            if not results_by_module[mod]:
+                results_by_module[mod].append(chunk)
+                break
 
-    if general_results:
-        context_parts.append("--- General content ---")
-        context_parts.extend(general_results)
-
-    return "\n\n".join(context_parts)
+    return {
+        mod: "\n\n".join(chunks_list)
+        for mod, chunks_list in results_by_module.items()
+    }

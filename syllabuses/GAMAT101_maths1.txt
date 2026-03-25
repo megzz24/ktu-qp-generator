@@ -1,0 +1,53 @@
+COURSE CODE: GAMAT101
+SUBJECT: Mathematics for Information Science 1
+============================================================
+
+MODULE 1: Differential Calculus & Single Variable Functions
+--------------------------------------------------
+- Limits of Function Values
+- Continuity at a point and Continuous Functions
+- Rates of Change: Derivative at a Point
+- Derivative as a Function
+- Second and Higher-Order Derivatives
+- Instantaneous Rates of Change
+- Chain Rule
+- Implicit Differentiation
+- Tangents and Normal Lines
+- Linearization
+- Concavity: The Second Derivative Test for Concavity
+
+MODULE 2: Multivariable Functions & Partial Derivatives
+--------------------------------------------------
+- Functions of Several Variables: Domains and Ranges
+- Level curves of two variables
+- Limits for functions of two variables
+- Continuity for functions of two variables
+- Partial derivatives of functions of more than two variables
+- Partial derivatives and continuity
+- Second-Order partial derivatives
+- The Mixed Derivative Theorem
+- The Chain Rule: Functions of two variables
+
+MODULE 3: Directional Derivatives, Gradient & Extreme Values 
+--------------------------------------------------
+- The Chain Rule: Functions of three variables
+- Directional Derivatives in the Plane
+- Interpretation of the Directional Derivative
+- Gradient
+- Properties of the Directional Derivative
+- Local Extreme Values for Functions of Two Variables:
+- Relative extrema
+- First derivative theorem for local extreme values
+- Critical point and saddle point
+- Second Derivative Test for Local Extreme Values
+- Absolute Maxima and Minima on Closed Bounded Regions
+
+MODULE 4: Optimization: Lagrange Multipliers, Steepest Descent & LPP
+--------------------------------------------------
+- Constrained Maxima and Minima
+- The Method of Lagrange Multipliers with one constraint
+- The Method of Lagrange Multipliers with two constraints
+- Method of Steepest Descent (only two variables)
+- LPP Formation
+- Solution of LPP using Graphic Method
+

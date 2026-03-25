@@ -19,6 +19,7 @@ import fitz  # pymupdf
 from openai import AzureOpenAI
 from sentence_transformers import SentenceTransformer
 from dotenv import load_dotenv
+from validate_dataset import validate_entry
 
 load_dotenv()
 
@@ -35,15 +36,28 @@ RAW_DIR = "data/raw"
 SAMPLES_PER_SUBJECT = 10
 
 SUBJECTS = [
-    ("Python", "1 & 2", "UCEST105_python.txt"),
-    ("Electrical and Electronics", "1 & 2", "UCEST102_electrical.txt"),
-    ("Chemistry", "1 & 2", "UCEST104_chemistry.txt"),
-    ("Physics", "1 & 2", "UCEST106_physics.txt"),
-    ("Programming in C", "1 & 2", "UCEST108_prog_c.txt"),
-    ("Foundations of Computing", "1 & 2", "UCEST109_foundations.txt"),
-    ("Engineering Entrepreneurship and IPR", "1 & 2", "UCEST110_entrepreneur.txt"),
-    ("Data Structures and Algorithms", "1 & 2","PCCST303_data_structures.txt"),
-    ("Object Oriented Programming", "1 & 2","PBCST304_oop_java.txt")
+    # S1 & S2
+    ("Mathematics for Information Science 1", "1 & 2", "GAMAT101_maths1.txt"),
+    ("Physics for Information Science", "1 & 2", "GAPHT121_physics.txt"),
+    ("Chemistry for Information Science", "1 & 2", "GXCYT122_chemistry.txt"),
+    (
+        "Introduction to Electrical & Electronics Engineering",
+        "1 & 2",
+        "GXEST104_electrical.txt",
+    ),
+    ("Algorithmic Thinking with Python", "1 & 2", "UCEST105_python.txt"),
+    ("Mathematics for Information Science 2", "1 & 2", "GAMAT201_maths2.txt"),
+    ("Foundations of Computing", "1 & 2", "GXEST203_foundations.txt"),
+    ("Programming in C", "1 & 2", "GXEST204_prog_c.txt"),
+    ("Discrete Mathematics", "1 & 2", "PCCST205_discrete.txt"),
+    ("Engineering Entrepreneurship and IPR", "1 & 2", "UCEST206_entrepreneur.txt"),
+    # S3
+    ("Mathematics for Information Science 3", "3", "GAMAT301_maths3.txt"),
+    ("Theory of Computation", "3", "PCCST302_toc.txt"),
+    ("Data Structures and Algorithms", "3", "PCCST303_data_structures.txt"),
+    ("Object Oriented Programming", "3", "PBCST304_oop_java.txt"),
+    ("Digital Electronics and Logic Design", "3", "GAEST305_digital.txt"),
+    ("Economics for Engineers", "3", "UCHUT346_economics.txt"),
 ]
 
 # -----------------------------------------------
@@ -51,26 +65,69 @@ SUBJECTS = [
 # MUST BE IDENTICAL TO backend/app.py BASE_SYSTEM_PROMPT
 # -----------------------------------------------
 
-BASE_SYSTEM_PROMPT = """You are a KTU (APJ Abdul Kalam Technological University) question paper setter.
+BASE_SYSTEM_PROMPT = """
+You are a KTU (APJ Abdul Kalam Technological University) question paper setter.
 
-KTU FORMAT:
-- 4 modules, each with fixed question slots — never mix topics across modules.
+CRITICAL: YOUR OUTPUT MUST STRICTLY MATCH THE TEMPLATE BELOW.
+If ANY rule is violated, the output is INVALID.
 
-PART A (24 marks total):
-- 8 questions, 3 marks each. 2 questions per module.
-- Q1-2 → Module 1 | Q3-4 → Module 2 | Q5-6 → Module 3 | Q7-8 → Module 4
-- No module labels in Part A. Number questions 1–8 only.
-- Format: "1. Question text. (3)"
+---
 
-PART B (36 marks total):
-- 8 questions in OR pairs, 9 marks each. 2 questions per module.
-- Q9-10 → Module 1 | Q11-12 → Module 2 | Q13-14 → Module 3 | Q15-16 → Module 4
-- Label each module before its OR pair: "Module 1", etc.
-- "OR" appears on its own line between the two questions.
-- Subpart splits (preferred): (5)+(4) or (6)+(3). Single-question format (9) allowed at most twice.
-- Subpart format: "    a) Question text. (5)"
+## MANDATORY STRUCTURE RULES (NON-NEGOTIABLE)
 
-OUTPUT (no title, no preamble, start directly with PART A):
+1. TOTAL QUESTIONS:
+
+* EXACTLY 16 questions numbered from 1 to 16
+* NO missing or extra numbers
+
+2. PART A:
+
+* EXACTLY 8 questions (Q1–Q8)
+* Each carries (3) marks
+* 2 questions per module
+* NO module labels in Part A
+
+3. PART B:
+
+* EXACTLY 8 questions (Q9–Q16)
+* MUST be grouped into 4 modules
+* Each module MUST appear exactly once
+* Each module MUST contain exactly 2 questions
+
+4. OR PAIRS:
+
+* EXACTLY 4 OR pairs (one per module)
+* "OR" must appear on its own line
+* Each OR pair must be within the SAME module
+
+5. MARKS:
+
+* Each Part B question totals 9 marks
+* Preferred splits: (5)+(4) or (6)+(3)
+* Single (9) allowed at most twice
+
+6. MODULE ISOLATION (STRICT):
+
+* Module 1 → Q1,2,9,10 ONLY
+* Module 2 → Q3,4,11,12 ONLY
+* Module 3 → Q5,6,13,14 ONLY
+* Module 4 → Q7,8,15,16 ONLY
+* NEVER mix topics between modules
+* ONLY use topics explicitly present in that module’s syllabus
+
+7. DO NOT:
+
+* Add explanations, headings, or commentary
+* Change formatting
+* Skip numbering
+* Combine modules
+* Output anything outside the template
+
+---
+
+YOU MUST COPY THIS TEMPLATE EXACTLY
+Replace ONLY the question text.
+-------------------------------
 
 PART A
 (Answer all questions. Each question carries 3 marks)
@@ -89,13 +146,52 @@ PART B
 
 Module 1
 
-9.  a) [question] (5)
-    b) [question] (4)
-OR
-10. a) [question] (6)
-    b) [question] (3)
+9. a) [Module 1 question] (5)
+   b) [Module 1 question] (4)
+   OR
+10. a) [Module 1 question] (6)
+    b) [Module 1 question] (3)
 
-[Repeat pattern for Module 2 (Q11-12), Module 3 (Q13-14), Module 4 (Q15-16)]"""
+Module 2
+
+11. a) [Module 2 question] (5)
+    b) [Module 2 question] (4)
+    OR
+12. a) [Module 2 question] (6)
+    b) [Module 2 question] (3)
+
+Module 3
+
+13. a) [Module 3 question] (5)
+    b) [Module 3 question] (4)
+    OR
+14. a) [Module 3 question] (6)
+    b) [Module 3 question] (3)
+
+Module 4
+
+15. a) [Module 4 question] (5)
+    b) [Module 4 question] (4)
+    OR
+16. a) [Module 4 question] (6)
+    b) [Module 4 question] (3)
+
+---
+
+## FINAL CHECK BEFORE OUTPUT (MANDATORY)
+
+Before finishing, VERIFY:
+
+* There are EXACTLY 16 questions
+* Numbering is correct (1–16)
+* All 4 modules are present
+* Each module has exactly 2 questions
+* There are exactly 4 OR pairs
+* No module mixing has occurred
+
+If ANY check fails → FIX before outputting.
+
+"""
 
 LATEX_ADDON = """
 
@@ -105,9 +201,14 @@ MATH FORMATTING: Use LaTeX for all expressions.
 - Use \\frac{a}{b}, x^n, x_n, \\int, \\sum, \\alpha, \\beta, \\theta, \\lambda for standard notation."""
 
 LATEX_SUBJECTS = {
-    "Physics",
-    "Chemistry",
-    "Electrical and Electronics",
+    "Physics for Information Science",
+    "Chemistry for Information Science",
+    "Introduction to Electrical & Electronics Engineering",
+    "Mathematics for Information Science 1",
+    "Mathematics for Information Science 2",
+    "Mathematics for Information Science 3",
+    "Discrete Mathematics",
+    "Digital Electronics and Logic Design",
 }
 
 
@@ -157,13 +258,23 @@ VARIATION_HINTS = [
 # -----------------------------------------------
 
 SUBJECT_KEYWORD_MAP = {
-    "python": "Python",
-    "electrical": "Electrical and Electronics",
-    "chemistry": "Chemistry",
-    "physics": "Physics",
-    "prog_c": "Programming in C",
+    "maths1": "Mathematics for Information Science 1",
+    "physics": "Physics for Information Science",
+    "chemistry": "Chemistry for Information Science",
+    "electrical": "Introduction to Electrical & Electronics Engineering",
+    "python": "Algorithmic Thinking with Python",
+    "maths2": "Mathematics for Information Science 2",
     "foundations": "Foundations of Computing",
+    "prog_c": "Programming in C",
+    "discrete": "Discrete Mathematics",
     "entrepreneur": "Engineering Entrepreneurship and IPR",
+    # S3 additions
+    "maths3": "Mathematics for Information Science 3",
+    "data_structures": "Data Structures and Algorithms",
+    "oop_java": "Object Oriented Programming",
+    "toc": "Theory of Computation",
+    "digital": "Digital Electronics and Logic Design",
+    "economics": "Economics for Engineers",
 }
 
 
@@ -237,41 +348,31 @@ def load_index() -> tuple:
     return index, chunks, metadata
 
 
-def retrieve_context(
-    index, chunks: list, metadata: list, subject: str, top_k: int = 8
-) -> str:
-    query = f"KTU {subject} important topics examination questions"
-    query_vec = embedder.encode([query]).astype("float32")
-    distances, indices = index.search(query_vec, top_k * 5)
+def retrieve_context(index, chunks, metadata, subject: str, top_k: int = 4):
+    results_by_module = {1: [], 2: [], 3: [], 4: []}
 
-    results_by_module: dict[int, list[str]] = {1: [], 2: [], 3: [], 4: []}
-    general_results: list[str] = []
-
-    for i in indices[0]:
-        if i < 0 or i >= len(chunks):
-            continue
-        meta = metadata[i]
-        if subject.lower() not in meta["subject"].lower():
-            continue
-        mod = meta.get("module")
-        if isinstance(mod, int) and mod in results_by_module:
-            if len(results_by_module[mod]) < 2:
-                results_by_module[mod].append(chunks[i])
-        else:
-            if len(general_results) < 2:
-                general_results.append(chunks[i])
-
-    context_parts: list[str] = []
     for mod in [1, 2, 3, 4]:
-        if results_by_module[mod]:
-            context_parts.append(f"--- Module {mod} content ---")
-            context_parts.extend(results_by_module[mod])
-    if general_results:
-        context_parts.append("--- General content ---")
-        context_parts.extend(general_results)
+        query = f"{subject} module {mod} syllabus concepts exam questions"
+        query_vec = embedder.encode([query]).astype("float32")
 
-    return "\n\n".join(context_parts)
+        distances, indices = index.search(query_vec, top_k)
 
+        for i in indices[0]:
+            if i < 0 or i >= len(chunks):
+                continue
+
+            meta = metadata[i]
+
+            if subject.lower() not in meta["subject"].lower():
+                continue
+
+            if meta.get("module") == mod:
+                results_by_module[mod].append(chunks[i])
+
+            if len(results_by_module[mod]) >= 1:
+                break
+
+    return {mod: "\n\n".join(results_by_module[mod]) for mod in results_by_module}
 
 # -----------------------------------------------
 # GENERATION
@@ -281,7 +382,7 @@ def retrieve_context(
 def generate_question_paper(
     subject: str,
     semester: str,
-    context: str,
+    context_by_module: dict[int, str],
     module_topics: dict[int, str],
     variation_index: int,
     system_prompt: str,
@@ -292,8 +393,17 @@ def generate_question_paper(
 Style focus: {hint}
 Slot-module mapping: Q1,2,9,10 → Module 1 | Q3,4,11,12 → Module 2 | Q5,6,13,14 → Module 3 | Q7,8,15,16 → Module 4
 
-Context (use for question depth):
-{context}"""
+Module 1 context (ONLY for Q1,2,9,10):
+{context_by_module[1]}
+
+Module 2 context (ONLY for Q3,4,11,12):
+{context_by_module[2]}
+
+Module 3 context (ONLY for Q5,6,13,14):
+{context_by_module[3]}
+
+Module 4 context (ONLY for Q7,8,15,16):
+{context_by_module[4]}"""
 
     response = client.chat.completions.create(
         model=GENERATION_MODEL,
@@ -302,7 +412,7 @@ Context (use for question depth):
             {"role": "user", "content": user_prompt},
         ],
         max_tokens=4000,
-        temperature=0.75,
+        temperature=0.4,
     )
     return (response.choices[0].message.content or "").strip()
 
@@ -352,8 +462,15 @@ def extract_real_qps(
                         "content": f"Generate a KTU question paper for Semester 1 & 2, Subject: {subject}.",
                     },
                     {"role": "assistant", "content": qp_text},
-                ]
+                ],
+                "source": "real_qp"
             }
+            
+            valid, reasons = validate_entry(entry)
+
+            if not valid:
+                print(f"REJECTED — {reasons[0]}")
+                continue
             entries.append(entry)
             print(f"  Added real QP: {filename} ({len(qp_text.split())} words)")
 
@@ -389,7 +506,7 @@ def main() -> None:
     subjects_in_run = {s for s, _, _ in SUBJECTS}
     print("Scanning data/raw/ for past question paper PDFs...")
     real_entries = extract_real_qps(subjects_in_run, subject_prompts)
-    all_entries.extend(real_entries)
+    all_entries.extend(real_entries * 2)
     print(f"Added {len(real_entries)} real QP(s).\n")
 
     total_synthetic = len(SUBJECTS) * SAMPLES_PER_SUBJECT
@@ -401,7 +518,7 @@ def main() -> None:
         print(f"Subject: {subject}")
         module_topics = subject_module_topics[subject]
         system_prompt = subject_prompts[subject]
-        context = retrieve_context(index, chunks, metadata, subject)
+        context_by_module = retrieve_context(index, chunks, metadata, subject)
 
         for i in range(SAMPLES_PER_SUBJECT):
             print(f"  Sample {i + 1}/{SAMPLES_PER_SUBJECT}...", end=" ", flush=True)
@@ -409,11 +526,12 @@ def main() -> None:
                 qp_text = generate_question_paper(
                     subject=subject,
                     semester=semester,
-                    context=context,
+                    context_by_module=context_by_module,
                     module_topics=module_topics,
                     variation_index=i,
                     system_prompt=system_prompt,
                 )
+
                 entry = {
                     "messages": [
                         {"role": "system", "content": system_prompt},
@@ -424,6 +542,12 @@ def main() -> None:
                         {"role": "assistant", "content": qp_text},
                     ]
                 }
+                valid, reasons = validate_entry(entry)
+
+                if not valid:
+                    print(f"REJECTED — {reasons[0]}")
+                    continue
+
                 all_entries.append(entry)
                 print("OK")
             except Exception as e:

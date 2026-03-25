@@ -16,21 +16,36 @@ DEPLOYMENT_NAME = os.getenv("AZURE_OPENAI_DEPLOYMENT") or "ktu-qp-finetuned"
 SYLLABUS_DIR = os.path.join(os.path.dirname(__file__), "..", "syllabuses")
 
 SUBJECT_KEYWORD_MAP: dict[str, str] = {
-    "Python": "python",
-    "Electrical and Electronics": "electrical",
-    "Chemistry": "chemistry",
-    "Physics": "physics",
+    "Algorithmic Thinking with Python": "python",
+    "Introduction to Electrical & Electronics Engineering": "electrical",
+    "Chemistry for Information Science": "chemistry",
+    "Physics for Information Science": "physics",
     "Programming in C": "prog_c",
     "Foundations of Computing": "foundations",
     "Engineering Entrepreneurship and IPR": "entrepreneur",
+    "Mathematics for Information Science 1": "maths1",
+    "Mathematics for Information Science 2": "maths2",
+    "Discrete Mathematics": "discrete",
+    # S3 additions
+    "Mathematics for Information Science 3": "maths3",
+    "Data Structures and Algorithms": "data_structures",
+    "Object Oriented Programming": "oop_java",
+    "Theory of Computation": "toc",
+    "Digital Electronics and Logic Design": "digital",
+    "Economics for Engineers": "economics",
 }
+
 
 LATEX_SUBJECTS = {
-    "Physics",
-    "Chemistry",
-    "Electrical and Electronics",
+    "Physics for Information Science",
+    "Chemistry for Information Science",
+    "Introduction to Electrical & Electronics Engineering",
+    "Mathematics for Information Science 1",
+    "Mathematics for Information Science 2",
+    "Mathematics for Information Science 3",
+    "Discrete Mathematics",
+    "Digital Electronics and Logic Design",
 }
-
 
 def find_syllabus_file(subject: str) -> str | None:
     keyword = SUBJECT_KEYWORD_MAP.get(subject, "").lower()
@@ -73,24 +88,29 @@ def parse_module_topics(syllabus_text: str) -> dict[int, str]:
 
 BASE_SYSTEM_PROMPT = """You are a KTU (APJ Abdul Kalam Technological University) question paper setter.
 
-KTU FORMAT:
-- 4 modules, each with fixed question slots — never mix topics across modules.
+RULES — follow all of these without exception:
 
-PART A (24 marks total):
-- 8 questions, 3 marks each. 2 questions per module.
-- Q1-2 → Module 1 | Q3-4 → Module 2 | Q5-6 → Module 3 | Q7-8 → Module 4
-- No module labels in Part A. Number questions 1–8 only.
+MODULE ISOLATION:
+- Module 1 → Q1, Q2, Q9, Q10 only. Module 2 → Q3, Q4, Q11, Q12 only.
+- Module 3 → Q5, Q6, Q13, Q14 only. Module 4 → Q7, Q8, Q15, Q16 only.
+- Never use a topic from one module in another module's slots.
+- Only use topics explicitly listed in that module's syllabus. Do not invent topics.
+- If a topic appears in multiple modules, use it only in the module where it is listed.
+- Write all Module 1 questions first, then Module 2, then Module 3, then Module 4.
+
+PART A (24 marks):
+- 8 questions, 3 marks each. 2 per module. No module labels. Number 1–8 only.
 - Format: "1. Question text. (3)"
 
-PART B (36 marks total):
-- 8 questions in OR pairs, 9 marks each. 2 questions per module.
-- Q9-10 → Module 1 | Q11-12 → Module 2 | Q13-14 → Module 3 | Q15-16 → Module 4
-- Label each module before its OR pair: "Module 1", etc.
-- "OR" appears on its own line between the two questions.
-- Subpart splits (preferred): (5)+(4) or (6)+(3). Single-question format (9) allowed at most twice.
-- Subpart format: "    a) Question text. (5)"
+PART B (36 marks):
+- 8 questions in OR pairs, 9 marks each. 2 per module.
+- Label each module block: "Module 1", "Module 2", etc.
+- "OR" on its own line between each pair.
+- Preferred splits: (5)+(4) or (6)+(3). Single (9) allowed at most twice total.
+- Format: "    a) Question text. (5)"
 
-OUTPUT (no title, no preamble, start directly with PART A):
+OUTPUT:
+- No title, no preamble, no commentary. Start with PART A. End at Q16.
 
 PART A
 (Answer all questions. Each question carries 3 marks)
@@ -109,13 +129,35 @@ PART B
 
 Module 1
 
-9.  a) [question] (5)
-    b) [question] (4)
+9.  a) [Module 1 question] (5)
+    b) [Module 1 question] (4)
 OR
-10. a) [question] (6)
-    b) [question] (3)
+10. a) [Module 1 question] (6)
+    b) [Module 1 question] (3)
 
-[Repeat pattern for Module 2 (Q11-12), Module 3 (Q13-14), Module 4 (Q15-16)]"""
+Module 2
+
+11. a) [Module 2 question] (5)
+    b) [Module 2 question] (4)
+OR
+12. a) [Module 2 question] (6)
+    b) [Module 2 question] (3)
+
+Module 3
+
+13. a) [Module 3 question] (5)
+    b) [Module 3 question] (4)
+OR
+14. a) [Module 3 question] (6)
+    b) [Module 3 question] (3)
+
+Module 4
+
+15. a) [Module 4 question] (5)
+    b) [Module 4 question] (4)
+OR
+16. a) [Module 4 question] (6)
+    b) [Module 4 question] (3)"""
 
 LATEX_ADDON = """
 
@@ -170,17 +212,27 @@ app = Flask(__name__)
 CORS(app)
 
 SUPPORTED_SUBJECTS = [
-    "Python",
-    "Electrical and Electronics",
-    "Chemistry",
-    "Physics",
-    "Programming in C",
+    # S1 & S2
+    "Mathematics for Information Science 1",
+    "Physics for Information Science",
+    "Chemistry for Information Science",
+    "Introduction to Electrical & Electronics Engineering",
+    "Algorithmic Thinking with Python",
+    "Mathematics for Information Science 2",
     "Foundations of Computing",
+    "Programming in C",
+    "Discrete Mathematics",
     "Engineering Entrepreneurship and IPR",
+    # S3
+    "Mathematics for Information Science 3",
+    "Theory of Computation",
+    "Data Structures and Algorithms",
+    "Object Oriented Programming",
+    "Digital Electronics and Logic Design",
+    "Economics for Engineers",
 ]
 
-SUPPORTED_SEMESTERS = ["1 & 2"]
-
+SUPPORTED_SEMESTERS = ["1 & 2", "3"]
 
 @app.route("/generate", methods=["POST"])
 def generate() -> tuple:
@@ -196,20 +248,29 @@ def generate() -> tuple:
     if subject not in SUPPORTED_SUBJECTS:
         return jsonify({"error": f"Subject '{subject}' is not supported."}), 400
     if semester not in SUPPORTED_SEMESTERS:
-        return jsonify({"error": "Semester must be '1 & 2'."}), 400
+        return jsonify({"error": f"Semester must be one of {SUPPORTED_SEMESTERS}."}), 400
 
     try:
-        context = retrieve_context(subject)
+        context_by_module = retrieve_context(subject)
     except Exception as e:
         return jsonify({"error": f"Retrieval failed: {str(e)}"}), 500
 
     system_prompt = build_system_prompt(subject)
-
+    
     user_prompt = f"""Subject: {subject} | Semester: {semester}
 Slot-module mapping: Q1,2,9,10 → Module 1 | Q3,4,11,12 → Module 2 | Q5,6,13,14 → Module 3 | Q7,8,15,16 → Module 4
 
-Context (use for question depth):
-{context}"""
+Module 1 context (ONLY for Q1,2,9,10):
+{context_by_module[1]}
+
+Module 2 context (ONLY for Q3,4,11,12):
+{context_by_module[2]}
+
+Module 3 context (ONLY for Q5,6,13,14):
+{context_by_module[3]}
+
+Module 4 context (ONLY for Q7,8,15,16):
+{context_by_module[4]}"""
 
     try:
         response = client.chat.completions.create(

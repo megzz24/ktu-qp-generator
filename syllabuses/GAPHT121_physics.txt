@@ -1,0 +1,71 @@
+COURSE CODE: GAPHT121
+SUBJECT: Physics for Information Science
+============================================================
+
+MODULE 1: Electrical Conductivity & Superconductivity
+--------------------------------------------------
+- Electrical Conductivity:
+- Classical free electron theory
+- Electrical conductivity in metals
+- Fermi Dirac distribution
+- Variation of Fermi function with temperature
+- Fermi Energy
+- Energy bands
+- Classification of materials into conductor, semiconductor and insulator
+ 
+- Superconductivity:
+- Transition temperature
+- Critical field
+- Meissner effect
+- Type I and Type II Superconductors
+- BCS Theory
+- Applications of superconductors
+
+MODULE 2: Quantum Mechanics
+--------------------------------------------------
+- Introduction and concept of uncertainty and conjugate observables (qualitative)
+- Uncertainty principle (statement only)
+- Applications of uncertainty principle:
+- Absence of electron inside nucleus
+- Natural line broadening
+- Wave function: properties and physical interpretation
+- Formulation of time dependent Schrodinger equation
+- Formulation of time independent Schrodinger equation
+- Particle in a one-dimensional box:
+- Derivation of energy eigen values
+- Derivation of normalized wave function
+- Quantum Mechanical Tunnelling (qualitative)
+
+MODULE 3: Semiconductor Physics
+--------------------------------------------------
+- Intrinsic Semiconductors:
+- Intrinsic semiconductor
+- Derivation of density of electrons in conduction band
+- Derivation of density of holes in valence band
+- Intrinsic carrier concentration
+- Variation of intrinsic carrier concentration with temperature
+- Extrinsic semiconductor (qualitative)
+ 
+- P-N Junction:
+- Formation of p-n junction
+- Fermi level in semiconductors: intrinsic and extrinsic
+- Energy band diagram of p-n junction
+- Qualitative description of charge flow across a p-n junction
+- Forward and reverse biased p-n junctions
+- Diode equation (Derivation)
+- I-V Characteristics of p-n junction
+
+MODULE 4: Semiconductor Devices & Photonic Devices
+--------------------------------------------------
+Semiconductor Devices:
+- Rectifiers: Half wave and Full wave
+- Zener diode: V-I characteristics
+- Tunnel diode: V-I characteristics
+- Semiconductor Laser: Construction and working
+- Applications of Semiconductors
+ 
+Photonic Devices (qualitative treatment only):
+- Photo detectors: Junction and PIN photodiodes
+- Solar cells: I-V Characteristics, Efficiency, Stringing of solar cells to solar panel
+- Light Emitting Diode (LED)
+- Applications

@@ -1,0 +1,50 @@
+COURSE CODE: GXEST203
+SUBJECT: Foundations of Computing
+============================================================
+
+MODULE 1: Computer Hardware & System Architecture
+--------------------------------------------------
+- CPU and Memory
+- Memory hierarchy: registers, cache, RAM, virtual memory
+- Motherboard
+- Computer Peripherals: I/O devices
+- Storage devices: HDDs, SSDs, optical drives
+- I/O communication and device management
+- Interface cards
+- Buses
+- Firmware
+- Boot process
+
+MODULE 2: Data Representation & CPU Architecture
+--------------------------------------------------
+- Binary representation of data and numbers
+- Integer Representation
+- Data storage units: bits, bytes, kilobytes, etc.
+- ASCII and Unicode
+- CPU Architecture and Instruction Set:
+- Basic CPU architecture: ALU, registers, control unit
+- Instruction format and assembly language (basics only)
+- Fetch-execute cycle and instruction execution
+
+MODULE 3: Operating Systems, Networking & Internet
+--------------------------------------------------
+- Computer System Software
+- Operating Systems
+- Basic commands in Linux / Windows
+- Shell scripting (bash)
+- Computer Communications: LAN, MAN, WAN
+- Client/Server networks
+- Peer-to-Peer networks
+- Network Topologies
+- Basics of IP addresses
+- DHCP, NAT
+- Network Security (Desktop & Perimeter)
+- DNS, VPN, Routers
+- Client-Server, Internet, WWW, Web servers
+
+MODULE 4: Web Design: HTML, CSS & JavaScript
+--------------------------------------------------
+- Understanding web content delivery
+- Understanding HTML and XHTML connections
+- Understanding Cascading Style Sheets (CSS)
+- Understanding JavaScript

@@ -1,0 +1,46 @@
+COURSE CODE: GAEST305
+SUBJECT: Digital Electronics and Logic Design
+============================================================
+
+MODULE 1: Introduction to digital Systems 
+--------------------------------------------------
+- Digital abstraction
+- Number Systems: Binary, Hexadecimal, grouping bits, Base conversion
+- Binary Arithmetic: Addition and subtraction, Unsigned and Signed numbers
+- Fixed-Point Number Systems
+- Floating-Point Number Systems
+- Basic gates: Operation of a Logic circuit, Buffer
+- Gates: Inverter, AND gate, OR gate, NOR gate, NAND gate, XOR gate, XNOR gate
+- Digital circuit operation: logic levels, output dc specifications, input dc specifications, noise margins, power supplies
+- Driving loads: driving other gates, resistive loads and LEDs
+- Verilog (Part 1): HDL Abstraction, Modern digital design flow
+- Verilog constructs: data types, the module, Verilog operators
+ 
+MODULE 2: Combinational Logic Design
+--------------------------------------------------
+- Boolean Algebra: Operations, Axioms, Theorems
+- Combinational logic analysis: Canonical SOP and POS, Minterm and Maxterm equivalence
+- Logic minimization: Algebraic minimization, K-map minimization, Don't cares, Code convertors
+- Modeling concurrent functionality in Verilog
+- Continuous assignment with logical operators
+- Continuous assignment with conditional operators
+- Continuous assignment with delay
+
+MODULE 3: MSI Logic and Digital Building Blocks
+--------------------------------------------------
+- MSI Logic: Decoders (One-Hot decoder, 7 segment display decoder), Encoders, Multiplexers, Demultiplexers
+- Arithmetic Circuits: Half adder, Full adder, Half subtractor, Full subtractor
+- Comparators
+- Structural design and hierarchy: lower level module instantiation, gate level primitives, user defined primitives, adding delay to primitives
+
+MODULE 4: Sequential Logic Design
+--------------------------------------------------
+- Latches and Flip-Flops: SR latch, SR latch with enable, JK flipflop, D flipflop, Register Enabled Flip-Flop, Resettable Flip-Flop
+- Sequential logic timing considerations
+- Common circuits based on sequential storage devices: toggle flop clock divider, asynchronous ripple counter, shift register
+- Finite State Machines: logic synthesis for an FSM, FSM design process and design examples
+- Synchronous Sequential Circuits: Counters
+- Verilog (Part 2): Procedural assignment, Conditional Programming constructs, Test benches
+- Modeling a D flipflop in Verilog
+- Modeling an FSM in Verilog
+

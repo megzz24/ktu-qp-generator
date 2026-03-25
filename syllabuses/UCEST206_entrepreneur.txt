@@ -1,0 +1,90 @@
+COURSE CODE: UCEST206
+SUBJECT: Engineering Entrepreneurship and IPR
+============================================================
+
+MODULE 1: Ideation, Innovation, Entrepreneurship & IPR
+--------------------------------------------------
+- What is Ideation?
+- Understanding Innovation
+- Frameworks for Innovation
+- The Entrepreneurial Mindset
+- Starting a Business, types formation statutory compliances
+- Resources for Aspiring Entrepreneurs
+
+- Intellectual Property Rights (IPR)
+- Types of IPR: Patents, trademarks, copyrights, trade secrets
+- Strategies for protecting intellectual property based on the type of innovation
+- Role of IPR in securing funding and competitive advantage
+
+- Importance of Building a Strong Team
+- Identifying roles
+- Skill sets
+- Team dynamics
+ 
+- Identifying Pain Points and Problem Statement
+- Idea Generation Techniques
+- Developing and Refining Ideas
+- Develop strategies for bringing your innovation to life
+ 
+
+MODULE 2: Market Research, Customer Profiling & Competitor Analysis
+--------------------------------------------------
+- Problem and Solution Canvas Preparation
+- Orientation and canvas introduction
+- Customer needs assessment
+- Market segmentation
+- Value proposition
+- Competitive analysis
+- Market entry strategy
+- Market validation
+- Regulatory and legal considerations
+
+- Customer Profiling
+- Review of market research
+- Customer segmentation
+- Customer profiling
+- Persona development
+- Validation and feedback
+- Prioritization and selection
+- Communication and messaging
+
+- Competitor Analysis
+- Identify competitors
+- Competitor profiling
+- SWOT analysis
+- Market positioning
+- Customer feedback and reviews
+- Pricing analysis
+- Differentiation strategy
+- Benchmarking and improvement
+
+MODULE 3: Business Planning & Prototype Development Plan
+--------------------------------------------------
+- Business Plan Preparation
+- Business plan framework
+- Market analysis
+- Product/service description
+- Marketing and sales strategy
+- Operations plan
+- Financial projections
+- Risk management
+ 
+- Prototype Development Plan Preparation
+- Prototype requirements analysis
+- Technical specifications
+- Development approach
+- Development timeline
+- Resource allocation
+- Testing and quality assurance
+- Iterative development and feedback loop
+- Documentation and version control
+
+MODULE 4: Prototype Development & Stakeholder Engagement
+--------------------------------------------------
+- Prototype Development
+
+- Stakeholder Engagement Strategies
+- Investors
+- Partners
+- Customers
+- Advisors & Mentors

@@ -2,15 +2,23 @@ import fitz  # pymupdf
 import pickle
 import os
 import re
+import pytesseract
+from PIL import Image
+import io
+
+pytesseract.pytesseract.tesseract_cmd = r"C:\Users\meghn\AppData\Local\Programs\Tesseract-OCR\tesseract.exe"
 
 # -----------------------------------------------
 # CONFIG
 # -----------------------------------------------
 
-RAW_DIR = "data/raw"
-OUTPUT_PATH = "data/processed/chunks.pkl"
-SYLLABUS_DIR = "syllabuses"
-CHUNK_SIZE = 300  # words per chunk
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+RAW_DIR = os.path.join(BASE_DIR, "data/raw")
+OUTPUT_PATH = os.path.join(BASE_DIR, "data/processed/chunks.pkl")
+SYLLABUS_DIR = os.path.join(BASE_DIR, "syllabuses")
+
+CHUNK_SIZE = 150  # words per chunk
 OVERLAP = 50  # word overlap between chunks
 
 # Maps filename keywords → subject names.
@@ -28,34 +36,61 @@ OVERLAP = 50  # word overlap between chunks
 #   maths2, prog_c, foundations, entrepreneur, discrete,
 #   itworkshop, lspc, health
 SUBJECT_MAP = {
-    "python": "Python",
-    "electrical": "Electrical and Electronics",
-    "chemistry": "Chemistry",
-    "physics": "Physics",
-    "prog_c": "Programming in C",
+    "maths1": "Mathematics for Information Science 1",
+    "physics": "Physics for Information Science",
+    "chemistry": "Chemistry for Information Science",
+    "electrical": "Introduction to Electrical & Electronics Engineering",
+    "python": "Algorithmic Thinking with Python",
+    "maths2": "Mathematics for Information Science 2",
     "foundations": "Foundations of Computing",
+    "prog_c": "Programming in C",
+    "discrete": "Discrete Mathematics",
     "entrepreneur": "Engineering Entrepreneurship and IPR",
+    # S3 additions
+    "maths3": "Mathematics for Information Science 3",
     "data_structures": "Data Structures and Algorithms",
-    "oop_java": "Object Oriented Programming"
+    "oop_java": "Object Oriented Programming",
+    "toc": "Theory of Computation",
+    "digital": "Digital Electronics and Logic Design",
+    "economics": "Economics for Engineers",
 }
 
 # Maps subject names → keyword used in their syllabus filename
 SUBJECT_KEYWORD_MAP: dict[str, str] = {
-    "Python": "python",
-    "Electrical and Electronics": "electrical",
-    "Chemistry": "chemistry",
-    "Physics": "physics",
+    "Algorithmic Thinking with Python": "python",
+    "Introduction to Electrical & Electronics Engineering": "electrical",
+    "Chemistry for Information Science": "chemistry",
+    "Physics for Information Science": "physics",
     "Programming in C": "prog_c",
     "Foundations of Computing": "foundations",
     "Engineering Entrepreneurship and IPR": "entrepreneur",
+    "Mathematics for Information Science 1": "maths1",
+    "Mathematics for Information Science 2": "maths2",
+    "Discrete Mathematics": "discrete",
+    # S3 additions
+    "Mathematics for Information Science 3": "maths3",
     "Data Structures and Algorithms": "data_structures",
-    "Object Oriented Programming": "oop_java"
+    "Object Oriented Programming": "oop_java",
+    "Theory of Computation": "toc",
+    "Digital Electronics and Logic Design": "digital",
+    "Economics for Engineers": "economics",
 }
 
 # -----------------------------------------------
 # SYLLABUS KEYWORD INDEX
 # -----------------------------------------------
+def extract_text_with_ocr(pdf_path: str) -> str:
+    doc = fitz.open(pdf_path)
+    text = ""
 
+    for page in doc:
+        pix = page.get_pixmap()
+        img_bytes = pix.tobytes("png")
+        img = Image.open(io.BytesIO(img_bytes))
+        text += pytesseract.image_to_string(img)
+
+    doc.close()
+    return text
 
 def find_syllabus_file(subject: str) -> str | None:
     """Find the syllabus .txt file for a subject by keyword matching."""
@@ -93,34 +128,10 @@ def load_syllabus_keyword_index(subject: str) -> dict[int, list[str]]:
                 index[current_mod] = []
                 continue
             if current_mod is not None and line.startswith("-"):
-                words = re.findall(r"\b[a-zA-Z]{5,}\b", line)
+                words = re.findall(r"\b[a-zA-Z]{3,}\b", line)
                 index[current_mod].extend(w.lower() for w in words)
 
     return index
-
-
-def detect_module_from_chunk(
-    chunk: str,
-    keyword_index: dict[int, list[str]],
-) -> int | None:
-    """
-    Score a chunk against each module's keyword list.
-    Return the module with the highest keyword hit count,
-    or None if no module scores above zero.
-    """
-    if not keyword_index:
-        return None
-
-    chunk_lower = chunk.lower()
-    scores: dict[int, int] = {}
-
-    for mod_num, keywords in keyword_index.items():
-        score = sum(1 for kw in keywords if kw in chunk_lower)
-        scores[mod_num] = score
-
-    best_mod = max(scores, key=lambda k: scores[k])
-    return best_mod if scores[best_mod] > 0 else None
-
 
 # -----------------------------------------------
 # HELPERS
@@ -138,11 +149,8 @@ def extract_text_from_pdf(pdf_path: str) -> str:
 
 
 def clean_text(text: str) -> str:
-    """Remove excessive whitespace and non-printable characters."""
     text = re.sub(r"\s+", " ", text)
-    text = re.sub(r"[^\x20-\x7E\n]", "", text)
     return text.strip()
-
 
 def chunk_text(
     text: str, chunk_size: int = CHUNK_SIZE, overlap: int = OVERLAP
@@ -192,6 +200,87 @@ def detect_doc_type(filepath: str) -> str:
         return "previous_qp"
     return "notes"
 
+def detect_module_with_confidence(chunk, keyword_indexes):
+    chunk_lower = chunk.lower()
+    scores = {}
+
+    for mod, keywords in keyword_indexes.items():
+        score = sum(1 for kw in keywords if kw in chunk_lower)
+        scores[mod] = score
+
+    if not scores:
+        return None, 0
+
+    best_mod, best_score = max(scores.items(), key=lambda x: x[1])
+    return best_mod, best_score
+
+def extract_qp_by_module(text: str) -> dict[int, str]:
+    """
+    Extract text from a KTU QP grouped by module.
+    Part A: Q1-2 → Mod1, Q3-4 → Mod2, Q5-6 → Mod3, Q7-8 → Mod4
+    Part B: Split by "Module-N" / "Module N" labels
+    Returns { 1: "combined text", 2: "...", 3: "...", 4: "..." }
+    """
+    modules: dict[int, list[str]] = {1: [], 2: [], 3: [], 4: []}
+
+    # -----------------------------------------------
+    # PART A — fixed slot mapping
+    # -----------------------------------------------
+    part_a_match = re.search(
+        r"PART\s*A(.+?)(?:PART\s*B|$)", text, re.IGNORECASE | re.DOTALL
+    )
+    if part_a_match:
+        part_a = part_a_match.group(1)
+        # Split into individual questions on number boundaries
+        q_blocks = re.split(r"(?=^\s*\d{1,2}[\.\)]\s)", part_a, flags=re.MULTILINE)
+        for block in q_blocks:
+            q_match = re.match(r"^\s*(\d{1,2})[\.\)]", block)
+            if not q_match:
+                continue
+            q_num = int(q_match.group(1))
+            if 1 <= q_num <= 2:
+                modules[1].append(block.strip())
+            elif 3 <= q_num <= 4:
+                modules[2].append(block.strip())
+            elif 5 <= q_num <= 6:
+                modules[3].append(block.strip())
+            elif 7 <= q_num <= 8:
+                modules[4].append(block.strip())
+
+    # -----------------------------------------------
+    # PART B — split by Module labels
+    # -----------------------------------------------
+    part_b_match = re.search(
+        r"PART\s*B(.+)", text, re.IGNORECASE | re.DOTALL
+    )
+    if part_b_match:
+        part_b = part_b_match.group(1)
+
+        # Split on "Module-N", "Module N", "Module–N"
+        module_splits = re.split(
+            r"(?=module\s*[-–—:]?\s*[1-4]\s*:?)", part_b, flags=re.IGNORECASE
+        )
+
+        for section in module_splits:
+            mod_match = re.match(
+                r"module\s*[-–—:]?\s*([1-4])\s*:?", section, re.IGNORECASE
+            )
+            if not mod_match:
+                continue
+            mod_num = int(mod_match.group(1))
+            # Strip the module label line itself
+            content = re.sub(
+                r"module\s*[-–—:]?\s*([1-4])\s*:?", "", section,
+                count=1, flags=re.IGNORECASE
+            ).strip()
+            if content:
+                modules[mod_num].append(content)
+
+    return {
+        mod: "\n\n".join(parts)
+        for mod, parts in modules.items()
+        if parts
+    }
 
 # -----------------------------------------------
 # MAIN
@@ -233,6 +322,16 @@ def process_all_pdfs() -> None:
             raw_text = extract_text_from_pdf(filepath)
             text = clean_text(raw_text)
 
+            # OCR fallback
+            if len(text.split()) < 50:
+                print(f"  OCR fallback triggered for {filename}")
+                raw_text = extract_text_with_ocr(filepath)
+                text = clean_text(raw_text)
+            
+            if not text.strip():
+                print(f"  OCR failed for {filename}, skipping.")
+                continue
+
             if not text:
                 print(f"  WARNING: No text extracted from {filename}, skipping.")
                 continue
@@ -241,38 +340,88 @@ def process_all_pdfs() -> None:
             filename_module = detect_module_from_filename(filename)
             doc_type = detect_doc_type(filepath)
 
-            chunks = chunk_text(text)
-
             keyword_assigned = 0
             filename_assigned = 0
             unassigned = 0
+            processed_chunks = 0
+            chunks: list[str] = []
+            
+            module = None
+            
+            if doc_type == "previous_qp":
+                # Extract module-wise directly from QP structure
+                module_text = extract_qp_by_module(text)
+                
+                if any(module_text.values()):
+                    for mod_num, mod_text in module_text.items():
+                        mod_chunks = chunk_text(mod_text)
+                        for chunk in mod_chunks:
+                            chunk = chunk.strip()
+                            if len(chunk.split()) < 5:
+                                continue
+                            all_chunks.append(chunk)
+                            all_metadata.append({
+                                "subject": subject,
+                                "module": mod_num,
+                                "doc_type": doc_type,
+                                "source": filename,
+                            })
+                            keyword_assigned += 1
+                            processed_chunks += 1
+                    print(
+                        f"  Subject: {subject} | Type: {doc_type} | Chunks: {processed_chunks} "
+                        f"| module-tagged (QP structure): {keyword_assigned} "
+                        f"| untagged: {unassigned}"
+                    )
+                    continue  # skip the normal chunking loop below for this file
+
+                # Fallback if module labels not found in QP
+                print(f"  WARNING: No module labels found in {filename}, falling back to keyword tagging.")
+                chunks = chunk_text(text)
+            else:
+                chunks = chunk_text(text)
+                if len(chunks) <= 1:
+                    chunks = re.split(r"\n+", raw_text)
+                    chunks = [c.strip() for c in chunks if len(c.split()) > 20]
 
             for chunk in chunks:
-                if filename_module is not None:
+                chunk = chunk.strip()
+                if len(chunk.split()) < 5:
+                    continue
+
+                processed_chunks += 1
+                module = None
+
+                if doc_type == "previous_qp":
+                    # Module is already determined by extract_qp_by_module
+                    # handled separately below — skip normal chunking
+                    pass
+                elif filename_module is not None:
                     module = filename_module
                     filename_assigned += 1
                 elif subject in keyword_indexes:
-                    module = detect_module_from_chunk(chunk, keyword_indexes[subject])
-                    if module is not None:
+                    module_candidate, confidence = detect_module_with_confidence(
+                        chunk, keyword_indexes[subject]
+                    )
+                    if confidence >= 3:
+                        module = module_candidate
                         keyword_assigned += 1
                     else:
+                        module = None
                         unassigned += 1
                 else:
                     module = None
                     unassigned += 1
 
                 all_chunks.append(chunk)
-                all_metadata.append(
-                    {
-                        "subject": subject,
-                        "module": module,
-                        "doc_type": doc_type,
-                        "source": filename,
-                    }
-                )
-
+                all_metadata.append({
+                    "subject": subject,
+                    "module": module,
+                    "doc_type": doc_type,
+                    "source": filename,
+                })
             print(
-                f"  Subject: {subject} | Type: {doc_type} | Chunks: {len(chunks)} "
+                f"  Subject: {subject} | Type: {doc_type} | Chunks: {processed_chunks} "
                 f"| filename-tagged: {filename_assigned} "
                 f"| keyword-tagged: {keyword_assigned} "
                 f"| untagged: {unassigned}"

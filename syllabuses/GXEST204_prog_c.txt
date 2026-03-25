@@ -1,0 +1,77 @@
+COURSE CODE: GXEST204
+SUBJECT: Programming in C
+============================================================
+
+MODULE 1: C Fundamentals 
+--------------------------------------------------
+- Character Set
+- Constants, Identifiers, Keywords
+- Basic Data types
+- Variables
+- Operators and its precedence, 
+- Bit-wise operators,
+- Expressions
+- Input and Output statements
+- Structure of a C program
+- Simple programs.
+- Control Statements - if, if-else, nested if, switch, while, do-while, for, break & continue, nested loops.
+
+MODULE 2: Arrays and Strings
+--------------------------------------------------
+- Arrays 
+- Single dimensional arrays
+- Defining an array
+- Array initialization
+- Accessing array elements;
+- Enumerated data type
+- Type Definition
+- Two-dimensional arrays 
+- Defining a two-dimensional array
+- Programs for matrix processing
+- Programs for sequential search
+- Bubble sort
+
+- Strings 
+- Declaring a string variable, 
+- Reading and displaying strings,
+- String related library functions 
+- Programs for string matching.
+
+MODULE 3: Functions, Structures and Storage Classes
+--------------------------------------------------
+- Functions 
+- Function definition, Function call, Function prototype
+- Parameter passing
+- Recursion
+- Passing array to function
+- Defining and calling macros
+- Command line Arguments
+
+- Structures 
+- Defining a Structure variable, Accessing members
+- Array of structures
+- Passing structure to function
+- Union.
+
+- Storage Classes associated with variables: automatic, static, external and register.
+
+MODULE 4: Pointers and Files
+--------------------------------------------------
+- Pointers 
+- Declaration
+- Operations on pointers
+- Passing pointer to a function
+- Accessing array elements using pointers
+- Processing strings using pointers
+- Pointer to pointer
+- Array of pointers
+- Pointer to function
+- Pointer to structure
+- Dynamic Memory Allocation.
+
+- Files
+- Different types of files in C
+- Opening & Closing a file, 
+- Writing to and Reading from a file
+- Processing files
+- Library functions related to file – fseek(), ftell(), fread(), fwrite().

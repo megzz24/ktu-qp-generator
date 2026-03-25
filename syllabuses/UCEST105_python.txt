@@ -1,40 +1,101 @@
 COURSE CODE: UCEST105
-SUBJECT: Python
+SUBJECT: Algorithmic Thinking with Python
 ============================================================
 
-MODULE 1: Problem Solving and Python Essentials
+MODULE 1: Problem-Solving Strategies
 --------------------------------------------------
-  - Problem-solving strategies: definition, Trial and Error, Heuristics, Means-Ends Analysis, Backtracking
-  - Problem-solving process: understanding, modelling, algorithm, writing, testing, evaluating
-  - Computer as a model of computation
-  - Variables, numeric and string data types
-  - Math module, Python Standard Library
-  - Basic I/O: print, input
-  - Python operators and precedence
+- Problem-solving strategies defined
+- Importance of understanding multiple problem-solving strategies
+- Trial and Error 
+- Heuristics
+- Means-Ends Analysis
+- Backtracking (Working backward)
 
-MODULE 2: Algorithms and Flowcharts
---------------------------------------------------
-  - Pseudocode: definition, reasons for use
-  - Pseudocode constructs: sequencing, selection (if-else, case), repetition (for, while, repeat-until)
-  - Pseudocode sample problems
-  - Flowchart symbols: start/end, arithmetic, input/output, decision, module call
-  - Flowchart elements: for loop (hexagon), flow-lines, on-page and off-page connectors
+- Computer as a model of computation
+- Understanding the problem
+- Formulating a model
+- Developing an algorithm
+- Writing the program
+- Testing the program
+- Evaluating the solution
 
-MODULE 3: Python Programming and Functions
---------------------------------------------------
-  - Selection and iteration: if-else, elif, for, while, range
-  - Sequence data types: list, tuple, set, string, dictionary
-  - Arrays using NumPy
-  - Problem decomposition strategy and modularization
-  - Motivation for modularization
-  - Defining functions, multiple return values
-  - Recursion: definition, call stack, circularity
-  - Recursive problems: Fibonacci, GCD, factorial, integer addition, sum of digits
+- Creating and using variables in Python
+- Numeric and String data types in Python
+- Using the math module
+- Using the Python Standard Library for handling basic I/O - print, input
+- Python operators and their precedence
 
-MODULE 4: Computational Approaches
+MODULE 2: ALgorithms and Flowcharts
 --------------------------------------------------
-  - Brute-force: exhaustive search, e.g. padlock/password guessing
-  - Divide and conquer: Merge Sort, advantages and disadvantages
-  - Dynamic programming: Fibonacci, recursion vs DP
-  - Greedy algorithm: task scheduling example, motivations, characteristics, greedy vs DP
-  - Randomized approach: coupon collector problem, hat-check problem, motivations
+- Definition of Pseudocode
+- Reasons for using pseudocode
+- The main constructs of pseudocode 
+- Sequencing
+- Selection: if-else structure, case structure
+- Repetition: for, while, repeat-until loops
+
+- Flowchart symbols and diagram construction
+- Symbols used in creating a Flowchart - start and end
+- arithmetic calculations
+- input/output operation
+- decision (selection)
+- module name (call)
+- for loop (Hexagon)
+- flow-lines
+- on-page connector
+- off-page connector
+
+MODULE 3: Iteration, Modularization, and Recursion
+--------------------------------------------------
+- if-else, elif, for loop, range, while loop.
+- Sequence data types in Python - list, tuple, set, strings, dictionary
+- Creating and using Arrays in Python (using Numpy library)
+
+- Problem decomposition as a strategy for solving complex problems
+- Modularization
+- Motivation for modularization
+- Defining and using functions in Python
+- Functions with multiple return values
+
+- Definition and concept of recursion
+- Advantages of recursive problem solving
+- The Call Stack
+- Recursion and the Stack
+- Avoiding Circularity in Recursion
+- Finding the nth Fibonacci number
+- greatest common divisor of two positive integers
+- the factorial of a positive integer
+- adding two positive integers
+- the sum of digits of a positive number 
+
+MODULE 4: Computational Approaches to Problem-Solving
+--------------------------------------------------
+- Brute-force Approach 
+- Example: Padlock, Password guessing
+
+- Divide-and-conquer Approach 
+- Example: The Merge Sort Algorithm
+- Advantages of Divide and Conquer Approach
+- Disadvantages of Divide and Conquer Approach
+
+- Dynamic Programming Approach
+- Example: Fibonacci series
+- Recursion vs Dynamic Programming
+
+- Greedy Algorithm Approach
+- Example: Given an array of positive integers each indicating the completion
+  time for a task, find the maximum number of tasks that can be completed in
+  the limited amount of time that you have.
+- Motivations for the Greedy Approach
+- Characteristics of the Greedy Algorithm
+- Greedy Algorithms vs Dynamic Programming
+
+- Randomized Approach
+- Example 1: A company selling jeans gives a coupon for each pair of jeans.
+  There are n different coupons. Collecting n different coupons would give
+  you free jeans. How many jeans do you expect to buy before getting a free
+- Example 2: n people go to a party and drop off their hats to a hat-check person.
+  When the party is over, a different hat-check person is on duty and returns the
+  n hats randomly back to each person. What is the expected number of people
+  who get back their hats?
+- Motivations for the Randomized Approach

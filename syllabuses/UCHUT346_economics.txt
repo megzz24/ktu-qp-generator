@@ -1,0 +1,57 @@
+COURSE CODE: UCHUT346
+SUBJECT: Economics for Engineers
+============================================================
+
+MODULE 1: Basic Economics, Demand, Supply and Production
+--------------------------------------------------
+- Basic economic problems
+- Production Possibility Curve
+- Utility
+- Law of diminishing marginal utility
+- Demand: Factors determining demand
+- Law of Demand, Demand curve
+- Price elasticity of demand: measurement and applications
+- Supply: Factors determining supply
+- Law of supply, Supply curve
+- Equilibrium price determination
+- Changes in demand and supply and its effects on equilibrium price and quantity
+- Production function
+- Law of variable proportion
+- Returns to scale
+- Cobb-Douglas Production Function
+
+MODULE 2: Cost, Revenue and Market
+--------------------------------------------------
+- Cost concepts: Private cost and social cost, Sunk cost, Opportunity cost
+- Explicit and implicit cost
+- Short run cost curves
+- Long run average cost curve
+- Revenue concepts
+- Break-even point
+- Market: Perfect Competition
+- Monopoly
+- Monopolistic Competition: features and equilibrium of a firm
+- Oligopoly: Features, Kinked demand model
+
+MODULE 3: National Income and Inflation
+--------------------------------------------------
+- National income concepts: GDP, GNP and NNP
+- Final goods and Intermediate goods
+- Methods of Estimation: output method, expenditure method
+- Difficulties in the measurement of national income
+- Inflation: Causes and Effects
+- Measures to Control Inflation
+- Monetary and Fiscal policies
+- Repo and reverse repo rate
+
+MODULE 4: Value Engineering and Capital Budgeting
+--------------------------------------------------
+- Value Analysis and Value Engineering: Cost Value, Exchange Value, Use Value, Esteem Value
+- Aims, Advantages and Application areas of Value Engineering
+- Value Engineering Procedure
+- Capital Budgeting: Time value of money
+- Net Present Value Method
+- Benefit Cost Ratio
+- Internal Rate of Return
+- Payback
+- Accounting Rate of Return
