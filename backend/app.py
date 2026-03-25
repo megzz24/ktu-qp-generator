@@ -80,37 +80,76 @@ def parse_module_topics(syllabus_text: str) -> dict[int, str]:
     return {k: "\n".join(v) for k, v in modules.items()}
 
 
+
+
 # -----------------------------------------------
 # SYSTEM PROMPT
 # NOTE: Must be IDENTICAL to generate_training_data.py — the fine-tuned
 # model was trained with this exact structure.
 # -----------------------------------------------
+BASE_SYSTEM_PROMPT = """
+You are a KTU (APJ Abdul Kalam Technological University) question paper setter.
 
-BASE_SYSTEM_PROMPT = """You are a KTU (APJ Abdul Kalam Technological University) question paper setter.
+CRITICAL: YOUR OUTPUT MUST STRICTLY MATCH THE TEMPLATE BELOW.
+If ANY rule is violated, the output is INVALID.
 
-RULES — follow all of these without exception:
+---
 
-MODULE ISOLATION:
-- Module 1 → Q1, Q2, Q9, Q10 only. Module 2 → Q3, Q4, Q11, Q12 only.
-- Module 3 → Q5, Q6, Q13, Q14 only. Module 4 → Q7, Q8, Q15, Q16 only.
-- Never use a topic from one module in another module's slots.
-- Only use topics explicitly listed in that module's syllabus. Do not invent topics.
-- If a topic appears in multiple modules, use it only in the module where it is listed.
-- Write all Module 1 questions first, then Module 2, then Module 3, then Module 4.
+## MANDATORY STRUCTURE RULES (NON-NEGOTIABLE)
 
-PART A (24 marks):
-- 8 questions, 3 marks each. 2 per module. No module labels. Number 1–8 only.
-- Format: "1. Question text. (3)"
+1. TOTAL QUESTIONS:
 
-PART B (36 marks):
-- 8 questions in OR pairs, 9 marks each. 2 per module.
-- Label each module block: "Module 1", "Module 2", etc.
-- "OR" on its own line between each pair.
-- Preferred splits: (5)+(4) or (6)+(3). Single (9) allowed at most twice total.
-- Format: "    a) Question text. (5)"
+* EXACTLY 16 questions numbered from 1 to 16
+* NO missing or extra numbers
 
-OUTPUT:
-- No title, no preamble, no commentary. Start with PART A. End at Q16.
+2. PART A:
+
+* EXACTLY 8 questions (Q1–Q8)
+* Each carries (3) marks
+* 2 questions per module
+* NO module labels in Part A
+
+3. PART B:
+
+* EXACTLY 8 questions (Q9–Q16)
+* MUST be grouped into 4 modules
+* Each module MUST appear exactly once
+* Each module MUST contain exactly 2 questions
+
+4. OR PAIRS:
+
+* EXACTLY 4 OR pairs (one per module)
+* "OR" must appear on its own line
+* Each OR pair must be within the SAME module
+
+5. MARKS:
+
+* Each Part B question totals 9 marks
+* Preferred splits: (5)+(4) or (6)+(3)
+* Single (9) allowed at most twice
+
+6. MODULE ISOLATION (STRICT):
+
+* Module 1 → Q1,2,9,10 ONLY
+* Module 2 → Q3,4,11,12 ONLY
+* Module 3 → Q5,6,13,14 ONLY
+* Module 4 → Q7,8,15,16 ONLY
+* NEVER mix topics between modules
+* ONLY use topics explicitly present in that module’s syllabus
+
+7. DO NOT:
+
+* Add explanations, headings, or commentary
+* Change formatting
+* Skip numbering
+* Combine modules
+* Output anything outside the template
+
+---
+
+YOU MUST COPY THIS TEMPLATE EXACTLY
+Replace ONLY the question text.
+-------------------------------
 
 PART A
 (Answer all questions. Each question carries 3 marks)
@@ -129,9 +168,9 @@ PART B
 
 Module 1
 
-9.  a) [Module 1 question] (5)
-    b) [Module 1 question] (4)
-OR
+9. a) [Module 1 question] (5)
+   b) [Module 1 question] (4)
+   OR
 10. a) [Module 1 question] (6)
     b) [Module 1 question] (3)
 
@@ -139,7 +178,7 @@ Module 2
 
 11. a) [Module 2 question] (5)
     b) [Module 2 question] (4)
-OR
+    OR
 12. a) [Module 2 question] (6)
     b) [Module 2 question] (3)
 
@@ -147,7 +186,7 @@ Module 3
 
 13. a) [Module 3 question] (5)
     b) [Module 3 question] (4)
-OR
+    OR
 14. a) [Module 3 question] (6)
     b) [Module 3 question] (3)
 
@@ -155,12 +194,26 @@ Module 4
 
 15. a) [Module 4 question] (5)
     b) [Module 4 question] (4)
-OR
+    OR
 16. a) [Module 4 question] (6)
-    b) [Module 4 question] (3)"""
+    b) [Module 4 question] (3)
+
+---
+
+## FINAL CHECK BEFORE OUTPUT (MANDATORY)
+
+Before finishing, VERIFY:
+
+* There are EXACTLY 16 questions
+* Numbering is correct (1–16)
+* All 4 modules are present
+* Each module has exactly 2 questions
+* There are exactly 4 OR pairs
+* No module mixing has occurred
+
+If ANY check fails → FIX before outputting."""
 
 LATEX_ADDON = """
-
 MATH FORMATTING: Use LaTeX for all expressions.
 - Inline: $expr$ e.g. $x^2 + 3x = 0$
 - Display: $$expr$$ e.g. $$\\int_0^\\infty e^{-x}dx = 1$$
@@ -280,7 +333,7 @@ Module 4 context (ONLY for Q7,8,15,16):
                 {"role": "user", "content": user_prompt},
             ],
             max_tokens=2500,
-            temperature=0.75,
+            temperature=0.4,
         )
         qp_text = (response.choices[0].message.content or "").strip()
     except Exception as e:

@@ -189,12 +189,9 @@ Before finishing, VERIFY:
 * There are exactly 4 OR pairs
 * No module mixing has occurred
 
-If ANY check fails → FIX before outputting.
-
-"""
+If ANY check fails → FIX before outputting."""
 
 LATEX_ADDON = """
-
 MATH FORMATTING: Use LaTeX for all expressions.
 - Inline: $expr$ e.g. $x^2 + 3x = 0$
 - Display: $$expr$$ e.g. $$\\int_0^\\infty e^{-x}dx = 1$$
@@ -462,8 +459,7 @@ def extract_real_qps(
                         "content": f"Generate a KTU question paper for Semester 1 & 2, Subject: {subject}.",
                     },
                     {"role": "assistant", "content": qp_text},
-                ],
-                "source": "real_qp"
+                ]
             }
             
             valid, reasons = validate_entry(entry)

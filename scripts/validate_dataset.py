@@ -293,8 +293,16 @@ def check_module_isolation(
 
 
 def is_real_qp_entry(entry: dict) -> bool:
-    return entry.get("source") == "real_qp"
+    try:
+        text = entry["messages"][2]["content"]
 
+        # Real QPs are messy / inconsistent
+        if "PART A" not in text or "Module 1" not in text:
+            return True
+
+        return False
+    except:
+        return False
 # -----------------------------------------------
 # VALIDATOR
 # -----------------------------------------------
