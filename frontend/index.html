@@ -257,15 +257,27 @@ input[type="range"]::-webkit-slider-thumb {
   font-size: .78rem;
   padding: .35rem .7rem;
 }
+.btn-regen-part {
+  background: rgba(13,31,53,.08);
+  color: var(--navy);
+  border: 1px solid rgba(13,31,53,.2);
+  font-size: .78rem;
+  padding: .38rem .8rem;
+  border-radius: var(--r-sm);
+}
+.btn-regen-part:hover:not(:disabled) {
+  background: rgba(13,31,53,.14);
+  filter: none;
+}
 .btn-regen-q {
   background: rgba(200,146,42,.12);
-  color: var(--gold-light);
+  color: var(--gold);
   border: 1px solid rgba(200,146,42,.25);
   font-size: .72rem;
   padding: .28rem .6rem;
   border-radius: 4px;
-  opacity: 0;
-  transition: opacity .15s, filter .15s;
+  opacity: 1;
+  transition: background .15s, filter .15s;
   flex-shrink: 0;
 }
 .btn-download {
@@ -567,7 +579,6 @@ input[type="range"]::-webkit-slider-thumb {
   margin-bottom: .15rem;
 }
 .question-row:hover { background: rgba(200,146,42,.06); }
-.question-row:hover .btn-regen-q { opacity: 1; }
 
 .q-number {
   font-family: var(--ff-mono);
@@ -601,7 +612,6 @@ input[type="range"]::-webkit-slider-thumb {
   transition: background .12s;
 }
 .subpart-row:hover { background: rgba(200,146,42,.06); }
-.subpart-row:hover .btn-regen-q { opacity: 1; }
 .sub-label {
   font-family: var(--ff-mono);
   font-size: .8rem;
@@ -716,6 +726,7 @@ input[type="range"]::-webkit-slider-thumb {
     <span class="header-title">KTU Question Paper Generator</span>
     <span class="header-subtitle">MEC · CSE Dept</span>
   </div>
+  <span class="header-badge">BETA</span>
 </header>
 
 <div class="app-layout">
@@ -736,24 +747,20 @@ input[type="range"]::-webkit-slider-thumb {
           </div>
         </div>
 
-            <div class="form-group">
-                <label for="subject">Subject</label>
-                <select id="subject" onchange="onSubjectChange()">
-                    <option value="Mathematics 1">Mathematics for Information Science – 1</option>
-                    <option value="Python">Algorithmic Thinking with Python</option>
-                    <option value="Electrical and Electronics">Intro to Electrical &amp; Electronics Engg</option>
-                    <option value="Engineering Graphics">Engineering Graphics and CAD</option>
-                    <option value="Chemistry">Chemistry for Information Science</option>
-                    <option value="Physics">Physics for Information Science</option>
-                    <option value="Mathematics 2">Mathematics for Information Science – 2</option>
-                    <option value="Programming in C">Programming in C</option>
-                    <option value="Foundations of Computing">Foundations of Computing</option>
-                    <option value="Engineering Entrepreneurship and IPR">Engineering Entrepreneurship and IPR</option>
-                    <option value="Discrete Mathematics">Discrete Mathematics</option>
-                    <option value="LSPC">Life Skills and Professional Communication</option>
-                    <option value="Health and Wellness">Health and Wellness</option>
-                </select>
-            </div>
+        <div class="field">
+          <label>Subject</label>
+          <div class="select-wrap">
+            <select id="subject" onchange="onSubjectChange()">
+              <option value="Python">Algorithmic Thinking with Python</option>
+              <option value="Electrical and Electronics">Intro to Electrical &amp; Electronics Engg</option>
+              <option value="Chemistry">Chemistry for Information Science</option>
+              <option value="Physics">Physics for Information Science</option>
+              <option value="Programming in C">Programming in C</option>
+              <option value="Foundations of Computing">Foundations of Computing</option>
+              <option value="Engineering Entrepreneurship and IPR">Engineering Entrepreneurship &amp; IPR</option>
+            </select>
+          </div>
+        </div>
 
         <div class="field">
           <label>QP Code</label>
@@ -768,9 +775,23 @@ input[type="range"]::-webkit-slider-thumb {
       </div>
     </div>
 
-        <div class="loader" id="loader">
-            <div class="spinner"></div>
-            Generating question paper, please wait... (takes 6-8 minutes due to API rate limits)
+    <div>
+      <div class="sb-section-title">Typography</div>
+      <div style="display:flex;flex-direction:column;gap:.75rem">
+
+        <div class="field">
+          <label>Display Font</label>
+          <div class="select-wrap">
+            <select id="fontFamily" onchange="applyTypography()">
+              <option value="'Crimson Pro', Georgia, serif">Crimson Pro (Serif)</option>
+              <option value="'Inter', system-ui, sans-serif">Inter (Sans-serif)</option>
+              <option value="'IBM Plex Mono', monospace">IBM Plex Mono</option>
+              <option value="'Times New Roman', Times, serif">Times New Roman</option>
+              <option value="Georgia, serif">Georgia</option>
+              <option value="'Courier New', Courier, monospace">Courier New</option>
+              <option value="'Arial', Helvetica, sans-serif">Arial</option>
+            </select>
+          </div>
         </div>
 
         <div class="font-size-control">
@@ -796,10 +817,6 @@ input[type="range"]::-webkit-slider-thumb {
       <button class="btn btn-primary" id="generateBtn" onclick="generate()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         Generate Paper
-      </button>
-      <button class="btn btn-secondary" id="regenBtn" onclick="regenerateFull()" style="display:none">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-        Regenerate Whole Paper
       </button>
       <button class="btn btn-download" id="downloadBtn" onclick="downloadPDF()" style="display:none">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -842,6 +859,12 @@ input[type="range"]::-webkit-slider-thumb {
           <span class="status-pill done" id="statusPill">✓ Ready</span>
         </div>
         <div class="toolbar-right">
+          <button class="btn btn-regen-part" id="regenPartA" onclick="regenPart('A')" style="display:none">
+            ↻ Regen Part A
+          </button>
+          <button class="btn btn-regen-part" id="regenPartB" onclick="regenPart('B')" style="display:none">
+            ↻ Regen Part B
+          </button>
           <div class="view-toggle">
             <button class="active" id="viewRendered" onclick="setView('rendered')">Rendered</button>
             <button id="viewRaw" onclick="setView('raw')">Raw / Edit</button>
@@ -876,18 +899,24 @@ input[type="range"]::-webkit-slider-thumb {
 ================================================================ */
 const API_URL = "http://localhost:5000";
 
-        const SUBJECT_MAP = {
-            "Mathematics 1": { code: "GAMAT101", label: "MATHEMATICS FOR INFORMATION SCIENCE – 1" },
-            "Python": { code: "UCEST105", label: "ALGORITHMIC THINKING WITH PYTHON" },
-            "Electrical and Electronics": { code: "GXEST104", label: "INTRODUCTION TO ELECTRICAL AND ELECTRONICS ENGINEERING" },
-            "Chemistry": { code: "GXCY122", label: "CHEMISTRY FOR INFORMATION SCIENCE AND ELECTRICAL SCIENCE" },
-            "Physics": { code: "GAPHT121", label: "PHYSICS FOR INFORMATION SCIENCE" },
-            "Mathematics 2": { code: "GAMAT201", label: "MATHEMATICS FOR INFORMATION SCIENCE – 2" },
-            "Programming in C": { code: "GXEST204", label: "PROGRAMMING IN C" },
-            "Foundations of Computing": { code: "GXEST203", label: "FOUNDATIONS OF COMPUTING: FROM HARDWARE ESSENTIALS TO WEB DESIGN" },
-            "Engineering Entrepreneurship and IPR": { code: "UCEST206", label: "ENGINEERING ENTREPRENEURSHIP AND IPR" },
-            "Discrete Mathematics": { code: "PCCST205", label: "DISCRETE MATHEMATICS" },
-        };
+const SUBJECT_MAP = {
+  "Python":                              { code: "UCEST105", label: "ALGORITHMIC THINKING WITH PYTHON" },
+  "Electrical and Electronics":          { code: "GXEST104", label: "INTRODUCTION TO ELECTRICAL AND ELECTRONICS ENGINEERING" },
+  "Chemistry":                           { code: "GXCY122",  label: "CHEMISTRY FOR INFORMATION SCIENCE AND ELECTRICAL SCIENCE" },
+  "Physics":                             { code: "GAPHT121", label: "PHYSICS FOR INFORMATION SCIENCE" },
+  "Programming in C":                    { code: "GXEST204", label: "PROGRAMMING IN C" },
+  "Foundations of Computing":            { code: "GXEST203", label: "FOUNDATIONS OF COMPUTING: FROM HARDWARE ESSENTIALS TO WEB DESIGN" },
+  "Engineering Entrepreneurship and IPR":{ code: "UCEST206", label: "ENGINEERING ENTREPRENEURSHIP AND IPR" },
+};
+
+let state = {
+  raw: "",
+  subject: "",
+  semester: "",
+  isLatex: false,
+  view: "rendered",          // "rendered" | "raw"
+  questions: [],             // parsed question objects
+};
 
 /* ================================================================
    SUBJECT CHANGE
@@ -980,12 +1009,14 @@ async function generate() {
 }
 
 /* ================================================================
-   REGENERATE FULL PAPER
+   REGENERATE A PART (A or B)
 ================================================================ */
-async function regenerateFull() {
+async function regenPart(part) {
+  const btnA = document.getElementById('regenPartA');
+  const btnB = document.getElementById('regenPartB');
+  btnA.disabled = true;
+  btnB.disabled = true;
   setStatusGenerating();
-  const regenBtn = document.getElementById('regenBtn');
-  regenBtn.disabled = true;
 
   try {
     const res  = await fetch(`${API_URL}/generate`, {
@@ -994,25 +1025,97 @@ async function regenerateFull() {
       body: JSON.stringify({ semester: state.semester, subject: state.subject })
     });
     const data = await res.json();
-    if (!res.ok || data.error) throw new Error(data.error || "Unknown server error.");
+    if (!res.ok || data.error) throw new Error(data.error || "Server error");
 
-    state.raw     = data.question_paper;
-    state.isLatex = !!data.latex;
+    const newPaper = data.question_paper;
+
+    if (part === 'A') {
+      // Extract Q1-8 from new paper, keep Q9-16 from current
+      const newPartA  = extractPartFromPaper(newPaper, 1, 8);
+      const curPartB  = extractPartFromPaper(state.raw, 9, 16);
+      state.raw = rebuildPaper(newPaper, newPartA, curPartB);
+    } else {
+      // Keep Q1-8 from current, extract Q9-16 from new paper
+      const curPartA  = extractPartFromPaper(state.raw, 1, 8);
+      const newPartB  = extractPartFromPaper(newPaper, 9, 16);
+      state.raw = rebuildPaper(state.raw, curPartA, newPartB);
+    }
+
     renderPaper();
     if (state.view === 'raw') document.getElementById('rawTextarea').value = state.raw;
     setStatusDone();
 
   } catch (err) {
-    showError(err.message);
+    showError(`Could not regenerate Part ${part}: ${err.message}`);
     setStatusDone();
   } finally {
-    regenBtn.disabled = false;
+    btnA.disabled = false;
+    btnB.disabled = false;
   }
 }
 
-/* ================================================================
-   REGENERATE SINGLE QUESTION
-================================================================ */
+/* Extract lines for question numbers between start and end (inclusive) */
+function extractPartFromPaper(paper, startQ, endQ) {
+  const lines  = paper.split('\n');
+  const result = [];
+  let   inside = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trim = line.trim();
+
+    // detect question number lines
+    const qMatch = trim.match(/^(\d+)[.)]/);
+    if (qMatch) {
+      const n = parseInt(qMatch[1]);
+      if (n >= startQ && n <= endQ) { inside = true; }
+      else if (n > endQ)            { inside = false; break; }
+      else                          { inside = false; }
+    }
+
+    // include PART/Module/OR headers that belong to this range
+    if (!inside) {
+      if (/^(PART\s+B|Module\s*\d)/i.test(trim) && startQ >= 9) result.push(line);
+      if (/^(PART\s+A)/i.test(trim) && startQ === 1)            result.push(line);
+      if (/^\(Answer/i.test(trim))                               result.push(line);
+      continue;
+    }
+    result.push(line);
+
+    // also grab OR lines that follow inside a part
+    if (/^OR\s*$/i.test(trim)) result.push(line);
+  }
+  return result.join('\n');
+}
+
+/* Rebuild full raw paper from two part strings */
+function rebuildPaper(originalPaper, partAText, partBText) {
+  // Extract preamble (PART A header lines) from original
+  const lines = originalPaper.split('\n');
+  const partAHeader = [], partBHeader = [];
+  let   hitA = false, hitB = false;
+
+  for (const line of lines) {
+    const t = line.trim();
+    if (/^PART\s+A/i.test(t)) { hitA = true; }
+    if (/^PART\s+B/i.test(t)) { hitB = true; hitA = false; }
+    if (!hitA && !hitB) continue;
+    if (hitA && !hitB && /^\d+[.)]/.test(t)) break;
+    if (hitA && !hitB) partAHeader.push(line);
+    if (hitB && /^\d+[.)]/.test(t)) break;
+    if (hitB) partBHeader.push(line);
+  }
+
+  return [
+    ...partAHeader,
+    partAText.replace(/^(PART\s+A.*?\n(\(Answer.*?\)\n)?)/i, ''),
+    '',
+    ...partBHeader,
+    partBText.replace(/^(PART\s+B.*?\n(\(Answer.*?\)\n)?)/i, ''),
+  ].join('\n');
+}
+
+
 async function regenQuestion(qIndex) {
   const q = state.questions[qIndex];
   if (!q) return;
@@ -1377,7 +1480,8 @@ function showOutput() {
   document.getElementById('generateBtn').disabled = false;
 
   // show action buttons
-  document.getElementById('regenBtn').style.display   = 'flex';
+  document.getElementById('regenPartA').style.display  = 'inline-flex';
+  document.getElementById('regenPartB').style.display  = 'inline-flex';
   document.getElementById('downloadBtn').style.display = 'flex';
 
   // toolbar meta
