@@ -16,7 +16,7 @@ import json
 import pickle
 import faiss
 import fitz  # pymupdf
-from openai import AzureOpenAI
+import google.generativeai as genai
 from sentence_transformers import SentenceTransformer
 from dotenv import load_dotenv
 from validate_dataset import validate_entry
@@ -321,16 +321,12 @@ def parse_module_topics(syllabus_text: str) -> dict[int, str]:
 
 
 # -----------------------------------------------
-# AZURE CLIENT
+# GEMINI CLIENT  (replaces Azure OpenAI)
 # -----------------------------------------------
 
-client = AzureOpenAI(
-    azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT") or "",
-    api_key=os.getenv("AZURE_OPENAI_KEY") or "",
-    api_version="2024-02-01",
-)
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+model = genai.GenerativeModel("gemini-1.5-flash")
 
-GENERATION_MODEL = os.getenv("AZURE_OPENAI_BASE_DEPLOYMENT") or "gpt-4o-mini"
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
 # -----------------------------------------------
@@ -401,17 +397,18 @@ Module 3 context (ONLY for Q5,6,13,14):
 
 Module 4 context (ONLY for Q7,8,15,16):
 {context_by_module[4]}"""
-
-    response = client.chat.completions.create(
-        model=GENERATION_MODEL,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        max_tokens=4000,
-        temperature=0.4,
+    full_prompt = f"""
+    {system_prompt}
+USER INPUT:
+{user_prompt}
+"""
+    response = model.generate_content(
+        full_prompt,generation_config={
+        "temperature": 0.3, "top_p": 0.8, "max_output_tokens": 4000
+    }
+        
     )
-    return (response.choices[0].message.content or "").strip()
+    return (response.text or "").strip()
 
 
 # -----------------------------------------------
@@ -558,7 +555,7 @@ def main() -> None:
     print(f"\nDone. {len(all_entries)} total samples saved to {OUTPUT_PATH}")
     print(f"  Real QPs:   {len(real_entries)}")
     print(f"  Synthetic:  {len(all_entries) - len(real_entries)}")
-    print("Next step: run validate_dataset.py, then submit fine-tuning job on Azure.")
+    print("Next step: run validate_dataset.py, then submit fine-tuning job on Google Vertex AI.")
 
 
 if __name__ == "__main__":

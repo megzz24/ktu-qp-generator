@@ -442,7 +442,7 @@ def main() -> None:
             f.write(json.dumps(entry) + "\n")
 
     print(f"\nClean dataset saved to: {OUTPUT_PATH}")
-    print(f"This file is ready to upload to Azure OpenAI for fine-tuning.")
+    print(f"This file is ready to upload to Google Vertex AI for Gemini fine-tuning.")
 
 
 if __name__ == "__main__":

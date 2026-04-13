@@ -2,7 +2,7 @@ import os
 import re
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from openai import AzureOpenAI
+from google.generativeai as genai
 from dotenv import load_dotenv
 from retriever import retrieve_context
 
@@ -11,8 +11,11 @@ load_dotenv()
 # -----------------------------------------------
 # CONFIG
 # -----------------------------------------------
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-DEPLOYMENT_NAME = os.getenv("AZURE_OPENAI_DEPLOYMENT") or "ktu-qp-finetuned"
+model = genai.GenerativeModel("gemini-1.5-flash")
+
+
 SYLLABUS_DIR = os.path.join(os.path.dirname(__file__), "..", "syllabuses")
 
 SUBJECT_KEYWORD_MAP: dict[str, str] = {
@@ -93,6 +96,8 @@ You are a KTU (APJ Abdul Kalam Technological University) question paper setter.
 CRITICAL: YOUR OUTPUT MUST STRICTLY MATCH THE TEMPLATE BELOW.
 If ANY rule is violated, the output is INVALID.
 
+DO NOT ADD ANY TEXT BEFORE OR AFTER THE TEMPLATE.
+DO NOT INCLUDE EXPLANATIONS, HEADINGS, OR EXTRA NOTES.
 ---
 
 ## MANDATORY STRUCTURE RULES (NON-NEGOTIABLE)
@@ -247,15 +252,8 @@ def build_system_prompt(subject: str) -> str:
     return prompt
 
 
-# -----------------------------------------------
-# AZURE CLIENT
-# -----------------------------------------------
 
-client = AzureOpenAI(
-    azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT") or "",
-    api_key=os.getenv("AZURE_OPENAI_KEY") or "",
-    api_version="2024-02-01",
-)
+
 
 # -----------------------------------------------
 # FLASK APP
@@ -326,16 +324,19 @@ Module 4 context (ONLY for Q7,8,15,16):
 {context_by_module[4]}"""
 
     try:
-        response = client.chat.completions.create(
-            model=DEPLOYMENT_NAME,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            max_tokens=2500,
-            temperature=0.4,
+        full_prompt = system_prompt + "\n\nUSER INPUT:\n" + user_prompt  # FIX: was undefined
+
+        response = model.generate_content(
+            full_prompt,
+            generation_config={
+                "temperature": 0.3,
+                "top_p": 0.8,
+                "max_output_tokens": 2500
+            }
         )
-        qp_text = (response.choices[0].message.content or "").strip()
+
+        qp_text = (response.text or "").strip()
+
     except Exception as e:
         return jsonify({"error": f"Model inference failed: {str(e)}"}), 500
 
