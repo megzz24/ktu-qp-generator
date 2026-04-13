@@ -16,7 +16,7 @@ import json
 import pickle
 import faiss
 import fitz  # pymupdf
-import google.generativeai as genai
+from google import genai
 from sentence_transformers import SentenceTransformer
 from dotenv import load_dotenv
 from validate_dataset import validate_entry
@@ -324,8 +324,7 @@ def parse_module_topics(syllabus_text: str) -> dict[int, str]:
 # GEMINI CLIENT  (replaces Azure OpenAI)
 # -----------------------------------------------
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel("gemini-1.5-flash")
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
@@ -402,11 +401,10 @@ Module 4 context (ONLY for Q7,8,15,16):
 USER INPUT:
 {user_prompt}
 """
-    response = model.generate_content(
-        full_prompt,generation_config={
-        "temperature": 0.3, "top_p": 0.8, "max_output_tokens": 4000
-    }
-        
+    response = client.models.generate_content(
+        model="gemini-1.5-flash",
+        contents=full_prompt,
+        config={"temperature": 0.3, "top_p": 0.8, "max_output_tokens": 4000}
     )
     return (response.text or "").strip()
 

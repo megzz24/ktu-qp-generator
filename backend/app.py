@@ -2,7 +2,7 @@ import os
 import re
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from google.generativeai as genai
+from google import genai
 from dotenv import load_dotenv
 from retriever import retrieve_context
 
@@ -11,9 +11,7 @@ load_dotenv()
 # -----------------------------------------------
 # CONFIG
 # -----------------------------------------------
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
-model = genai.GenerativeModel("gemini-1.5-flash")
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 
 SYLLABUS_DIR = os.path.join(os.path.dirname(__file__), "..", "syllabuses")
@@ -326,13 +324,10 @@ Module 4 context (ONLY for Q7,8,15,16):
     try:
         full_prompt = system_prompt + "\n\nUSER INPUT:\n" + user_prompt  # FIX: was undefined
 
-        response = model.generate_content(
-            full_prompt,
-            generation_config={
-                "temperature": 0.3,
-                "top_p": 0.8,
-                "max_output_tokens": 2500
-            }
+        response = client.models.generate_content(
+            model="gemini-1.5-flash",
+            contents=full_prompt,
+            config={"temperature": 0.3, "top_p": 0.8, "max_output_tokens": 2500}
         )
 
         qp_text = (response.text or "").strip()
